@@ -1,4 +1,3 @@
-mod config;
 mod debug;
 mod metrics;
 mod sources;
@@ -13,7 +12,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
   loop {
     let metrics = sampler.get_metrics(msec)?;
-    println!("{:?}", metrics.cpu_power);
+    println!("{:?}", metrics);
   }
 
   Ok(())
