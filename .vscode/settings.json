@@ -1,0 +1,16 @@
+{
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true,
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "terminal.integrated.tabStopWidth": 2,
+  "editor.formatOnSave": true,
+  "code-runner.executorMap": {
+    "rust": "cargo run -r #$fileName",
+  },
+  "files.exclude": { "Cargo.lock": true },
+  "rust-analyzer.lens.implementations.enable": false,
+}
