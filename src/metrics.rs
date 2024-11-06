@@ -24,10 +24,9 @@ impl Sampler {
 
   pub fn get_metrics(&mut self, duration: u64) -> WithError<Metrics> {
     let mut rs = Metrics::default();
-
     for x in self.ior.get_sample(duration) {
       if x.group == "Energy Model" {
-        rs.cpu_power += cfio_watts(x.item, &x.unit, duration)?
+        rs.cpu_power += cfio_watts(x.item, &x.unit)?;
       }
     }
 

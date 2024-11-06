@@ -108,9 +108,8 @@ fn cfio_get_group(item: CFDictionaryRef) -> String {
   }
 }
 
-pub fn cfio_watts(item: CFDictionaryRef, unit: &String, duration: u64) -> WithError<f32> {
+pub fn cfio_watts(item: CFDictionaryRef, unit: &String) -> WithError<f32> {
   let val = unsafe { IOReportSimpleGetIntegerValue(item, 0) } as f32;
-  let val = val / (duration as f32 / 1000.0);
   match unit.as_str() {
     "mJ" => Ok(val / 1e3f32),
     "uJ" => Ok(val / 1e6f32),
