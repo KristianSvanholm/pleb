@@ -1,17 +1,22 @@
-mod metrics;
-mod sources;
+mod macos;
+mod linux;
 
-use metrics::Sampler;
+#[cfg(target_os = "macos")]
+use macos::metrics::Sampler;
+#[cfg(target_os = "linux")]
+use linux::metrics::Sampler;
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
-  let msec = 100;
+  let ms = 100;
 
   let mut sampler = Sampler::new()?;
 
   loop {
-    let metrics = sampler.get_metrics(msec)?;
-    println!("{:?}", metrics);
+    let metrics = sampler.get_metrics(ms)?;
+    if metrics.cpu_power != 0 {
+        println!("{} µj", metrics.cpu_power);
+    }
   }
 
   Ok(())

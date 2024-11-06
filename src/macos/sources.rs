@@ -279,7 +279,7 @@ impl IOReport {
       CFRelease(sample1 as _);
       CFRelease(sample2 as _);
       IOReportIterator::new(sample3)
-    }
+}
   }
 }
 

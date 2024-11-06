@@ -1,10 +1,10 @@
-use crate::sources::{cfio_watts, IOReport};
+use super::sources::{cfio_watts, IOReport};
 
 type WithError<T> = Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Debug, Default)]
 pub struct Metrics {
-  pub cpu_power: f32, // Watts
+  pub cpu_power: f32, // Joules
 }
 
 pub struct Sampler {
