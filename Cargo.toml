@@ -1,7 +1,6 @@
 [package]
-name = "macmon"
-version = "0.3.3"
-edition = "2021"
+name = "thesis"
+version = "0.0.0"
 
 [lints.rust]
 non_camel_case_types = "allow"
