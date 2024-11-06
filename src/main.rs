@@ -1,4 +1,3 @@
-mod debug;
 mod metrics;
 mod sources;
 
