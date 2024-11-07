@@ -1,2 +1,2 @@
 #[cfg(target_os = "linux")]
-pub mod metrics;
+pub mod sampler;

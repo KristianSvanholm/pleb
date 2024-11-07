@@ -1,4 +1,4 @@
 #[cfg(target_os = "macos")]
-pub mod metrics;
+pub mod sampler;
 #[cfg(target_os = "macos")]
 mod sources;

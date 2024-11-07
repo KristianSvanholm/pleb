@@ -1,22 +1,15 @@
-use std::fmt::{Debug, Result};
+use powercap::IntelRapl;
 use std::path::PathBuf;
 
-use powercap::IntelRapl;
-
-#[derive(Debug, Default)]
-pub struct Metrics {
-  cpu_power: u64, // Joules
-}
-
 pub struct Sampler {
-  i_rapl: IntelRapl,
+    i_rapl: IntelRapl,
 }
 
 impl Sampler {
     pub fn new() -> Sampler {
         let i_rapl = match IntelRapl::try_from(PathBuf::from("/sys/class/powercap/intel-rapl")) {
-        Ok(ir) => ir,
-        Err(e) => panic!("{:?}", e),
+            Ok(ir) => ir,
+            Err(e) => panic!("{:?}", e),
         };
 
         Sampler { i_rapl }
@@ -34,6 +27,6 @@ impl Sampler {
     }
 
     pub fn sample_end(&self, prev: u64) -> u64 {
-        self.sample_start()-prev
+        self.sample_start() - prev
     }
 }
