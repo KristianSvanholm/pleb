@@ -20,7 +20,6 @@ fn main() {
     let exports = benchmark(generate_command(&args.command), args.runs);
     println!("{}", &exports);
     println!("Totals: {}", summarize(exports));
-
 }
 
 fn generate_command(command: &str) -> Command {
@@ -28,7 +27,7 @@ fn generate_command(command: &str) -> Command {
     let mut cmd = Command::new(parts[0]);
 
     for part in parts.into_iter().skip(1) {
-       cmd.arg(part);
+        cmd.arg(part);
     }
 
     cmd
