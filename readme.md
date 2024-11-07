@@ -1,7 +1,7 @@
 # Thesis
 Cross platform process energy benchmarking tool.
 
-## Mac OS
+## MacOS
 Utilizes IOReport, an undocumented Apple API.
 
 I performed open source surgery on [vladkens/macmon](https://github.com/vladkens/macmon), to pick out the pieces I needed. Many thanks!
