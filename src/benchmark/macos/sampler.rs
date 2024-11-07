@@ -24,7 +24,7 @@ impl Sampler {
         self.ior.sample()
     }
 
-    pub fn sample_end(&self, prev: *const __CFDictionary) -> u64 {
+    pub fn sample_end(&self, prev: *const __CFDictionary) -> f64 {
         self.ior.delta(prev, self.ior.sample())
     }
 }

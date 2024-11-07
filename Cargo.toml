@@ -14,6 +14,7 @@ strip = false
 
 [dependencies]
 cfg = "0.9.0"
+chrono = "0.4.38"
 clap = { version = "4.5.20", features = ["derive"] }
 core-foundation = "0.10.0"
 libc = "0.2.161"

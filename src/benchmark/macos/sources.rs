@@ -287,14 +287,14 @@ impl IOReport {
         unsafe { IOReportCreateSamples(self.subs, self.chan, null()) }
     }
 
-    pub fn delta(&self, start: *const __CFDictionary, end: *const __CFDictionary) -> u64 {
+    pub fn delta(&self, start: *const __CFDictionary, end: *const __CFDictionary) -> f64 {
         unsafe {
             let delta = IOReportCreateSamplesDelta(start, end, null());
             CFRelease(start as _);
             CFRelease(end as _);
             let samples = IOReportIterator::new(delta);
 
-            let mut power: f32 = 0.0;
+            let mut power: f64 = 0.0;
             for x in samples {
                 if x.group == "Energy Model" {
                     power += match cfio_micro_joules(x.item, &x.unit) {
@@ -303,7 +303,7 @@ impl IOReport {
                     };
                 }
             }
-            power as u64
+            power
         }
     }
 }

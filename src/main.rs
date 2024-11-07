@@ -3,7 +3,7 @@ mod benchmark;
 use clap::Parser;
 use std::process::Command;
 
-use benchmark::benchmark;
+use benchmark::{benchmark, summarize};
 
 #[derive(Debug, Parser)]
 #[command(version, verbatim_doc_comment)]
@@ -17,7 +17,10 @@ struct CLI {
 fn main() {
     let args = CLI::parse();
 
-    println!("{} µj", benchmark(generate_command(&args.command), args.runs));
+    let exports = benchmark(generate_command(&args.command), args.runs);
+    println!("{}", &exports);
+    println!("Totals: {}", summarize(exports));
+
 }
 
 fn generate_command(command: &str) -> Command {
