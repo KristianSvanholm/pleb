@@ -1,5 +1,5 @@
-mod macos;
 mod linux;
+mod macos;
 
 #[cfg(target_os = "linux")]
 use linux::benchmark::benchmark;
@@ -7,5 +7,5 @@ use linux::benchmark::benchmark;
 use macos::benchmark::benchmark;
 
 fn main() {
-    println!("{} µj", benchmark("pwd"));
+  println!("{} µj", benchmark("pwd"));
 }

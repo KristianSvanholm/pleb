@@ -12,7 +12,7 @@ use core_foundation::{
   base::{kCFAllocatorDefault, kCFAllocatorNull, CFRelease, CFTypeRef},
   dictionary::{
     CFDictionaryCreateMutableCopy, CFDictionaryGetCount, CFDictionaryGetValue, CFDictionaryRef,
-    CFMutableDictionaryRef,
+    CFMutableDictionaryRef, __CFDictionary,
   },
   number::{kCFNumberSInt32Type, CFNumberCreate, CFNumberRef},
   string::{kCFStringEncodingUTF8, CFStringCreateWithBytesNoCopy, CFStringGetCString, CFStringRef},
@@ -108,7 +108,7 @@ fn cfio_get_group(item: CFDictionaryRef) -> String {
   }
 }
 
-pub fn cfio_watts(item: CFDictionaryRef, unit: &String) -> WithError<f32> {
+pub fn cfio_joules(item: CFDictionaryRef, unit: &String) -> WithError<f32> {
   let val = unsafe { IOReportSimpleGetIntegerValue(item, 0) } as f32;
   match unit.as_str() {
     "mJ" => Ok(val / 1e3f32),
@@ -279,7 +279,31 @@ impl IOReport {
       CFRelease(sample1 as _);
       CFRelease(sample2 as _);
       IOReportIterator::new(sample3)
-}
+    }
+  }
+
+  pub fn sample(&self) -> *const __CFDictionary {
+    unsafe { IOReportCreateSamples(self.subs, self.chan, null()) }
+  }
+
+  pub fn delta(&self, start: *const __CFDictionary, end: *const __CFDictionary) -> u64 {
+    unsafe {
+      let delta = IOReportCreateSamplesDelta(start, end, null());
+      CFRelease(start as _);
+      CFRelease(end as _);
+      let samples = IOReportIterator::new(delta);
+
+      let mut power: f32 = 0.0;
+      for x in samples {
+        if x.group == "Energy Model" {
+          power += match cfio_joules(x.item, &x.unit) {
+            Ok(j) => j,
+            Err(e) => panic!("{:?}", e),
+          };
+        }
+      }
+      (power * 1000.0) as u64
+    }
   }
 }
 

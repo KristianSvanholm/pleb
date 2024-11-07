@@ -1,4 +1,6 @@
-use super::sources::{cfio_watts, IOReport};
+use core_foundation::dictionary::__CFDictionary;
+
+use super::sources::IOReport;
 
 type WithError<T> = Result<T, Box<dyn std::error::Error>>;
 
@@ -12,24 +14,24 @@ pub struct Sampler {
 }
 
 impl Sampler {
-  pub fn new() -> WithError<Self> {
+  pub fn new() -> Sampler {
     let channels = vec![
       ("Energy Model", None), // cpu power
     ];
 
-    let ior = IOReport::new(channels)?;
+    let ior = match IOReport::new(channels) {
+      Ok(ior) => ior,
+      Err(e) => panic!("{:?}", e),
+    };
 
-    Ok(Sampler { ior })
+    Sampler { ior }
   }
 
-  pub fn get_metrics(&mut self, duration: u64) -> WithError<Metrics> {
-    let mut rs = Metrics::default();
-    for x in self.ior.get_sample(duration) {
-      if x.group == "Energy Model" {
-        rs.cpu_power += cfio_watts(x.item, &x.unit)?;
-      }
-    }
+  pub fn sample_start(&self) -> *const __CFDictionary {
+    self.ior.sample()
+  }
 
-    Ok(rs)
+  pub fn sample_end(&self, prev: *const __CFDictionary) -> u64 {
+    self.ior.delta(prev, self.ior.sample())
   }
 }

@@ -29,6 +29,8 @@ println!("{}",total_energy);
 
 ```
 
+TODO:: Get a good source for scale of energy readings.
+
 ## Linux
 Uses intel RAPL through Powercap
 
