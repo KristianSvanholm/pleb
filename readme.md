@@ -1,50 +1,15 @@
 # Thesis
+Cross platform process energy benchmarking tool.
 
 ## Macos
-Uses IOREPORT
+Utilizes IOReport, an undocumented Apple API.
 
-pseudocode:
-```rust
-// Pre-benchmark steps:
-let start = IOReportCreateSamples(...);
+I performed open source surgery on [vladkens/macmon](https://github.com/vladkens/macmon), to pick out the pieces I needed. Many thanks!
 
-// Benchmark
-system(benchmark) // wait for this to finish
+Followed [this](https://medium.com/@vladkens/how-to-get-macos-power-metrics-with-rust-d42b0ad53967) article to achieve this. Again, by [Vladkens](https://github.com/vladkens).
 
-// Post benchmark steps:
-let end = IOReportCreateSamples(...);
-let delta = IOReportCreateSampelsDelta(start, end, null());
-CFRelease(start as _)
-CFRelease(end as _)
-let iterator = IOReportIterator::new(delta)
+## Linux 
+Utilizes Powercap to access Intel RAPL. 
 
-let total_energy = 0;
-for x in iterator {
-    if x.group == "Energy Model" {
-        total_energy += x.item;
-    }
-}
-
-println!("{}",total_energy);
-
-```
-
-TODO:: Get a good source for scale of energy readings.
-
-## Linux
-Uses intel RAPL through Powercap
-
-```rust
-// Pre-benchmark steps:
-let start = i_rapl.total_energy()?
-
-// Benchmark
-system(benchmark) // wait for this to finish
-
-// Post benchmark steps:
-let end = i_rapl.total_energy()?
-
-println!("{}", end-start)
-
-```
+Might add support for AMD RAPL in the future :)
 
