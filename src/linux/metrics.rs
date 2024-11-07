@@ -19,9 +19,7 @@ impl Sampler {
       Err(e) => panic!("{:?}", e),
     };
 
-    let prev = i_rapl.total_energy().unwrap();
-
-    Sampler { i_rapl, prev }
+    Sampler { i_rapl }
   }
 
   pub fn get_metrics(&self) -> u64 {
