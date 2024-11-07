@@ -1,6 +1,7 @@
 mod benchmark;
 
 use clap::Parser;
+use std::process::Command;
 
 use benchmark::benchmark;
 
@@ -16,5 +17,16 @@ struct CLI {
 fn main() {
     let args = CLI::parse();
 
-    println!("{} µj", benchmark(&args.command, args.runs));
+    println!("{} µj", benchmark(generate_command(&args.command), args.runs));
+}
+
+fn generate_command(command: &str) -> Command {
+    let parts: Vec<&str> = command.split(" ").collect();
+    let mut cmd = Command::new(parts[0]);
+
+    for part in parts.into_iter().skip(1) {
+       cmd.arg(part);
+    }
+
+    cmd
 }

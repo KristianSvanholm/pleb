@@ -8,15 +8,15 @@ use macos::sampler::Sampler;
 
 use std::process::Command;
 
-pub fn benchmark(bench: &str, runs: u64) -> u64 {
+pub fn benchmark(mut cmd: Command, runs: u64) -> u64 {
     let sampler = Sampler::new();
 
     let mut total = 0;
     for _n in 0..runs {
         let start = sampler.sample_start();
 
-        match Command::new(bench).output() {
-            Ok(res) => println!("{:?}", res),
+        match cmd.output(){
+            Ok(_) => (),
             Err(e) => println!("{}", e),
         };
 
