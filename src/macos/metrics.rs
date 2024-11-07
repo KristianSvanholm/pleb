@@ -2,13 +2,6 @@ use core_foundation::dictionary::__CFDictionary;
 
 use super::sources::IOReport;
 
-type WithError<T> = Result<T, Box<dyn std::error::Error>>;
-
-#[derive(Debug, Default)]
-pub struct Metrics {
-  pub cpu_power: f32, // Joules
-}
-
 pub struct Sampler {
   ior: IOReport,
 }

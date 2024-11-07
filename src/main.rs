@@ -8,4 +8,5 @@ use macos::benchmark::benchmark;
 
 fn main() {
   println!("{} µj", benchmark("pwd"));
+  println!("{} µj", benchmark(""));
 }
