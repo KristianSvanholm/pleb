@@ -1,11 +1,5 @@
 #![allow(non_upper_case_globals)]
-#![allow(dead_code)]
 
-use std::{
-    marker::{PhantomData, PhantomPinned},
-    mem::MaybeUninit,
-    ptr::null,
-};
 use core_foundation::{
     array::{CFArrayGetCount, CFArrayGetValueAtIndex, CFArrayRef},
     base::{kCFAllocatorDefault, kCFAllocatorNull, CFRelease, CFTypeRef},
@@ -17,6 +11,11 @@ use core_foundation::{
     string::{
         kCFStringEncodingUTF8, CFStringCreateWithBytesNoCopy, CFStringGetCString, CFStringRef,
     },
+};
+use std::{
+    marker::{PhantomData, PhantomPinned},
+    mem::MaybeUninit,
+    ptr::null,
 };
 
 pub type WithError<T> = Result<T, Box<dyn std::error::Error>>;
@@ -109,12 +108,12 @@ fn cfio_get_group(item: CFDictionaryRef) -> String {
     }
 }
 
-pub fn cfio_joules(item: CFDictionaryRef, unit: &String) -> WithError<f32> {
+pub fn cfio_micro_joules(item: CFDictionaryRef, unit: &String) -> WithError<f32> {
     let val = unsafe { IOReportSimpleGetIntegerValue(item, 0) } as f32;
     match unit.as_str() {
-        "mJ" => Ok(val / 1e3f32),
-        "uJ" => Ok(val / 1e6f32),
-        "nJ" => Ok(val / 1e9f32),
+        "mJ" => Ok(val * 1e3f32),
+        "uJ" => Ok(val),
+        "nJ" => Ok(val / 1e3f32),
         _ => Err(format!("Invalid energy unit: {}", unit).into()),
     }
 }
@@ -298,13 +297,13 @@ impl IOReport {
             let mut power: f32 = 0.0;
             for x in samples {
                 if x.group == "Energy Model" {
-                    power += match cfio_joules(x.item, &x.unit) {
+                    power += match cfio_micro_joules(x.item, &x.unit) {
                         Ok(j) => j,
                         Err(e) => panic!("{:?}", e),
                     };
                 }
             }
-            (power * 1000.0) as u64
+            power as u64
         }
     }
 }
