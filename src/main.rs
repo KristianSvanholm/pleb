@@ -1,12 +1,8 @@
-mod linux;
-mod macos;
-
-#[cfg(target_os = "linux")]
-use linux::benchmark::benchmark;
-#[cfg(target_os = "macos")]
-use macos::benchmark::benchmark;
+mod benchmark;
 
 use clap::Parser;
+
+use benchmark::benchmark;
 
 #[derive(Debug, Parser)]
 #[command(version, verbatim_doc_comment)]

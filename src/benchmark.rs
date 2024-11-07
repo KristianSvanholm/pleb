@@ -1,4 +1,10 @@
-use super::metrics::Sampler;
+mod linux;
+mod macos;
+
+#[cfg(target_os = "linux")]
+use linux::metrics::Sampler;
+#[cfg(target_os = "macos")]
+use macos::metrics::Sampler;
 
 use std::process::Command;
 
