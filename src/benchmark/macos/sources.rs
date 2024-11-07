@@ -108,8 +108,8 @@ fn cfio_get_group(item: CFDictionaryRef) -> String {
     }
 }
 
-pub fn cfio_micro_joules(item: CFDictionaryRef, unit: &String) -> WithError<f32> {
-    let val = unsafe { IOReportSimpleGetIntegerValue(item, 0) } as f32;
+pub fn cfio_micro_joules(item: CFDictionaryRef, unit: &String) -> WithError<f64> {
+    let val = unsafe { IOReportSimpleGetIntegerValue(item, 0) } as f64;
     match unit.as_str() {
         "mJ" => Ok(val * 1e3f32),
         "uJ" => Ok(val),
