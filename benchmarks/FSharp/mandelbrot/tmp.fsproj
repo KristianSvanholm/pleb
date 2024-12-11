@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+	<OutputType>EXE</OutputType>
+	<TargetFramework>netcoreapp8.0</TargetFramework>
+	<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    </PropertyGroup>
+    <ItemGroup>
+	<Compile Include="Program.fs"/>
+    </ItemGroup>
+</Project>
