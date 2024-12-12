@@ -20,3 +20,8 @@ Program.cs
 *.ali
 *.o
 *.gnat_run
+
+#Haskell
+*.ghc_run
+*.hi
+*.hs
