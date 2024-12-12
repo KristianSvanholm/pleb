@@ -51,6 +51,19 @@
 			    #hhvm # Hack. Cant get this to work yet.
 			    #gnu-smalltalk # Smalltalk
 			    #graalvm-ce # Java Graal
+
+			    # Pidigits
+			    gmp
+			    python312Packages.gmpy2
+
+			    #libApr
+			    apr
+
+			    #pcre
+			    pcre
+
+			    #khash
+			    htslib
 			];
 		    };
 		}
