@@ -65,6 +65,9 @@
 
 			    #khash
 			    htslib
+
+			    #Regex
+			    boost
 			];
 		    };
 		}

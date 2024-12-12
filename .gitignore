@@ -47,3 +47,7 @@ compiled/
 
 # Rust
 target/
+
+# C++
+*.gpp_run
+*.out
