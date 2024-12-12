@@ -1,0 +1,12 @@
+[package]
+name = "binary-trees"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rayon = "1.10.0"
+typed-arena = "2.0.2"
+
+[profile.release]
+opt-level = 3
+lto = true

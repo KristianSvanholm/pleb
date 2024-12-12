@@ -5,6 +5,7 @@
 	nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 	flake-utils.url = "github:numtide/flake-utils";
 	old-ocaml.url = "github:nixos/nixpkgs/54c1e44240d8a527a8f4892608c4bce5440c3ecb";
+	old-dart.url = "github:nixos/nixpkgs/733b33a07eac62a01f738f4bf15aa46b4c84168b";
 	#hhvm.url = "github:nixos/nixpkgs/db8a4a4ef5644652bba98243805323eb7bf10404";
     };
 
@@ -22,11 +23,10 @@
 			buildInputs = [
 			    python312 
 			    libgcc # C/C++
-			    rustc # Rust
+			    rustup # Rust
 			    jdk # Java
 			    ghc # Haskell
 			    llvmPackages_15.libllvm # Haskell
-			    dart 
 			    erlang 
 			    go
 			    fsharp
@@ -46,6 +46,7 @@
 			    swift
 			    dotnet-sdk
 			    typescript
+			    inputs.old-dart.legacyPackages.${system}.dart # Dart 2.7.2
 			    inputs.old-ocaml.legacyPackages.${system}.ocaml # Ocaml 4.14.1
 			    #inputs.hhvm.legacyPackages.${system}.hhvm
 			    #hhvm # Hack. Cant get this to work yet.

@@ -34,3 +34,16 @@ Program.cs
 
 # js / ts
 node_modules/
+
+# Pascal
+*.fpascal_run
+*.ppu
+
+# Java
+*.class
+
+# Racket
+compiled/
+
+# Rust
+target/

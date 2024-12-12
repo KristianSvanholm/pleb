@@ -1,15 +1,15 @@
 compile:
-	/usr/local/src/rust-1.16.0/bin/rustc -C opt-level=3 -C target-cpu=core2 -C lto -L /usr/local/src/rust-libs knucleotide.rs -o knucleotide.rust-4.rust_run
+	cargo build --profile=release
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./knucleotide.rust-4.rust_run 0 < ../../knucleotide-input25000000.txt" Rust k-nucleotide
+	sudo ../../RAPL/main "./target/release/k-nucleotide 0 < ../../knucleotide-input25000000.txt" Rust k-nucleotide
 
 run:
-	./knucleotide.rust-4.rust_run 0 < ../../knucleotide-input25000000.txt
+	./target/release/k-nucleotide 0 < ../../knucleotide-input25000000.txt
 
 mem:
-	/usr/bin/time -v ./knucleotide.rust-4.rust_run 0 < ../../knucleotide-input25000000.txt
+	/usr/bin/time -v ./target/release/k-nucleotide 0 < ../../knucleotide-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./knucleotide.rust-4.rust_run 0 < ../../knucleotide-input25000000.txt
+	valgrind --tool=massif --stacks=yes ./target/release/k-nucleotide 0 < ../../knucleotide-input25000000.txt
