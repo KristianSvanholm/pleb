@@ -1,5 +1,5 @@
 compile:
-	/usr/bin/go build -o spectralnorm.go-4.go_run
+	go build -o spectralnorm.go-4.go_run
 
 measure:
 	sudo modprobe msr

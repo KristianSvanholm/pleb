@@ -55,3 +55,6 @@ target/
 # Erlang
 *.beam
 *.erl
+
+# Go
+*.go_run
