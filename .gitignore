@@ -1,3 +1,22 @@
 .DS_Store
 /target
 /internal
+
+### Benchamrking ###
+# input files
+knucleotide-input25000000.txt
+regexredux-input5000000.txt
+revcomp-input25000000.txt
+
+#CSharp & FSharp
+obj/
+bin/
+Program.fs
+Program.cs
+
+#Ada
+*.ads
+*.adb
+*.ali
+*.o
+*.gnat_run
