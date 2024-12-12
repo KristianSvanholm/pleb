@@ -4,7 +4,7 @@
 ! contributed by Andrei Jirnyi, modified from version by Steve Decker
 !
 ! compilation:
-!   ifort -ipo -O3 revcomp.f90
+!   gfortran -ipo -O3 revcomp.f90
 
 program revcomp
   use iso_fortran_env
@@ -29,7 +29,7 @@ program revcomp
        "T", "V", "G", "H", "E", "F", "C", "D", "I", "J", "M", "L", "K",  &
        "N", "O", "P", "Q", "Y", "S", "A", "A", "B", "W", "X", "R" /))
 
-  ! Unformatted I/O is faster in ifort under linux.
+  ! Unformatted I/O is faster in gfortran under linux.
   close(input_unit)
   open(unit=input_unit,access='stream',form='unformatted')
   close(output_unit)

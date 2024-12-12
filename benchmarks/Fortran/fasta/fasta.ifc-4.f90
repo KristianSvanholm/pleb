@@ -10,7 +10,7 @@
 !
 ! Linux  - using the Intel Fortran90 compiler:
 !
-!          ifort -fast -opt-streaming-stores always fasta3.f90
+!          gfortran -fast -opt-streaming-stores always fasta3.f90
 !          time ./a.out 25000000 > /dev/null
 
 

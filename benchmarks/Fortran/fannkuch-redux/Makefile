@@ -1,5 +1,5 @@
 compile:
-	ifort -O3 -fast -openmp fannkuchredux.ifc-3.f90 -o fannkuchredux.ifc-3.ifc_run
+	gfortran -O3 -ofast -fopenmp fannkuchredux.ifc-3.f90 -o fannkuchredux.ifc-3.ifc_run
 measure:
 	sudo modprobe msr
 	sudo ../../RAPL/main "./fannkuchredux.ifc-3.ifc_run 12" Fortran fannkuch-redux

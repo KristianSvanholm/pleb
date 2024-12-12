@@ -6,7 +6,7 @@
 ! on 5 October 2005.
 ! compilation:
 !    g95 -O1 knucleotide.f90
-!    ifort -O3 -ip knucleotide.f90
+!    gfortran -O3 -ip knucleotide.f90
 !
 ! This implementation requires TR15581
 

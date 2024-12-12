@@ -3,7 +3,7 @@
 !
 ! contributed by Andrei Jirnyi
 !   Closely based on C codes by Bartlett/Bonzini/Mellor
-! compilation: ifort -O2 -xHost -ipo pidigits2.f90 -lgmp
+! compilation: gfortran -O2 -xHost -ipo pidigits2.f90 -lgmp
 
 module gmp_mod
   ! declaring the GMP functions...

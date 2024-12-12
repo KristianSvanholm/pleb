@@ -5,8 +5,8 @@
 !  thanks to Gilbert Brietzke for the previous Fortran code,
 !  and to other submitters for their work
 ! Compilation:
-! - single-core: ifort -fast fannkuch3.f90
-! - multi-core:  ifort -fast -openmp fannkuch3.f90
+! - single-core: gfortran -fast fannkuch3.f90
+! - multi-core:  gfortran -fast -openmp fannkuch3.f90
 
 program fannkuch
   use iso_fortran_env

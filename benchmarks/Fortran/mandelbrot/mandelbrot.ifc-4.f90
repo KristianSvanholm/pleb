@@ -4,7 +4,7 @@
 ! Contributed by Jason Blevins
 ! Adapted from Fortran versions by George R. Gonzalez and Simon Geard
 !
-! ifort -fast -openmp -o mandelbrot mandelbrot.f90
+! gfortran -fast -openmp -o mandelbrot mandelbrot.f90
 program mandelbrot
   implicit none
 
