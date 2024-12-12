@@ -58,3 +58,6 @@ target/
 
 # Go
 *.go_run
+
+# Javascript
+*.js
