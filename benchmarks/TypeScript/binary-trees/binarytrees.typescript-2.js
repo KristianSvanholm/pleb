@@ -1,11 +1,13 @@
+"use strict";
 /* The Computer Language Benchmarks Game
    http://benchmarksgame.alioth.debian.org/
    contributed by Isaac Gouy
    *reset*
 */
-"use strict";
 /// <reference path="../node_modules/@types/node/index.d.ts" />
 class TreeNode {
+    left;
+    right;
     constructor(left, right) {
         this.left = left;
         this.right = right;

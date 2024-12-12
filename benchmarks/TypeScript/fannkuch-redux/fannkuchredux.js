@@ -1,8 +1,8 @@
+"use strict";
 /* The Computer Language Benchmarks Game
    http://benchmarksgame.alioth.debian.org/
    contributed by Isaac Gouy
 */
-"use strict";
 /// <reference path="../node_modules/@types/node/index.d.ts" />
 function fannkuch(n) {
     const perm = new Array(n), count = new Array(n);

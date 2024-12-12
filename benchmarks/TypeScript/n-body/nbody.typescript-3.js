@@ -1,12 +1,13 @@
+"use strict";
 /* The Computer Language Benchmarks Game
    http://benchmarksgame.alioth.debian.org/
    contributed by Isaac Gouy
 
    TypeScript install check, transliterated from C#
 */
-"use strict";
 /// <reference path="../node_modules/@types/node/index.d.ts" />
 class NBodySystem {
+    bodies;
     constructor() {
         this.bodies = [
             Body.Sun(),
@@ -74,6 +75,16 @@ class NBodySystem {
     }
 }
 class Body {
+    x;
+    y;
+    z;
+    vx;
+    vy;
+    vz;
+    mass;
+    static PI = 3.141592653589793;
+    static SOLAR_MASS = 4 * Body.PI * Body.PI;
+    static DAYS_PER_YEAR = 365.24;
     constructor(x, y, z, vx, vy, vz, mass) {
         this.x = x;
         this.y = y;
@@ -105,9 +116,6 @@ class Body {
         return this;
     }
 }
-Body.PI = 3.141592653589793;
-Body.SOLAR_MASS = 4 * Body.PI * Body.PI;
-Body.DAYS_PER_YEAR = 365.24;
 var n = +process.argv[2];
 var nbodies = new NBodySystem();
 console.log(nbodies.energy().toFixed(9));
