@@ -25,3 +25,12 @@ Program.cs
 *.ghc_run
 *.hi
 *.hs
+
+#OCaml
+*.cmi
+*.cmx
+*.ocaml_run
+*.ml
+
+# js / ts
+node_modules/
