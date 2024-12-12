@@ -56,6 +56,7 @@
 			    # Pidigits
 			    gmp
 			    python312Packages.gmpy2
+			    perl540Packages.MathGMPz
 
 			    #libApr
 			    apr
