@@ -1,7 +1,6 @@
 {
     description = "Dependencies";
-
-    inputs = {
+inputs = {
 	nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 	flake-utils.url = "github:numtide/flake-utils";
 	old-ocaml.url = "github:nixos/nixpkgs/54c1e44240d8a527a8f4892608c4bce5440c3ecb";
@@ -31,11 +30,9 @@
 			    go
 			    fsharp
 			    gfortran # Fortran [ifx would not work for apple]
-			    gnat # Ada
 			    jruby
 			    ruby
 			    nodejs_23 # JavaScript
-			    julia
 			    sbcl # Lisp
 			    lua
 			    php
@@ -46,9 +43,7 @@
 			    swift
 			    dotnet-sdk
 			    typescript
-			    inputs.old-dart.legacyPackages.${system}.dart # Dart 2.7.2
-			    inputs.old-ocaml.legacyPackages.${system}.ocaml # Ocaml 4.14.1
-			    #inputs.hhvm.legacyPackages.${system}.hhvm
+	    		    #inputs.hhvm.legacyPackages.${system}.hhvm
 			    #hhvm # Hack. Cant get this to work yet.
 			    #gnu-smalltalk # Smalltalk
 			    #graalvm-ce # Java Graal
@@ -69,6 +64,13 @@
 
 			    #Regex
 			    boost
+
+
+			    ### Is not packaged for apple silicon currently, or at required legacy
+			    #julia
+			    #gnat # ada
+			    #inputs.old-dart.legacyPackages.${system}.dart # Dart 2.7.2
+			    #inputs.old-ocaml.legacyPackages.${system}.ocaml # Ocaml 4.14.1
 			];
 		    };
 		}
