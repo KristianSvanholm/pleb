@@ -64,3 +64,8 @@ target/
 
 # Lisp
 *.core
+
+# Fortran
+*.ifc_run
+fort.5
+fort.6
