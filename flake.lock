@@ -50,6 +50,22 @@
         "type": "github"
       }
     },
+    "old-ghc": {
+      "locked": {
+        "lastModified": 1671268780,
+        "narHash": "sha256-9Okbivo10bcXEGCtmAQNfJt1Zpk6B3tjkSQ2CIXmTCg=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "80c24eeb9ff46aa99617844d0c4168659e35175f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "80c24eeb9ff46aa99617844d0c4168659e35175f",
+        "type": "github"
+      }
+    },
     "old-ocaml": {
       "locked": {
         "lastModified": 1617325113,
@@ -71,6 +87,7 @@
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
         "old-dart": "old-dart",
+        "old-ghc": "old-ghc",
         "old-ocaml": "old-ocaml"
       }
     },
