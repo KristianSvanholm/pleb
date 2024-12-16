@@ -35,7 +35,6 @@ inputs = {
 			    nodejs_23 # JavaScript
 			    sbcl # Lisp
 			    lua
-			    php
 			    fpc # Pascal
 			    perl
 			    racket
@@ -47,6 +46,15 @@ inputs = {
 			    #hhvm # Hack. Cant get this to work yet.
 			    #gnu-smalltalk # Smalltalk
 			    #graalvm-ce # Java Graal
+
+
+			    # php
+			    (php.buildEnv {
+				extensions = ({enabled, all}: enabled ++ (with all; [
+				    sysvmsg
+				    shmop
+				]));
+			    })
 
 			    # Pidigits
 			    gmp
