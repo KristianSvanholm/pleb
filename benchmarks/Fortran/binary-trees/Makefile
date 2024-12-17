@@ -1,5 +1,5 @@
 compile:
-	gfortran -O3 -xHost -openmp -p -lapr-1 binarytrees.ifc-2.f90 -o binarytrees.ifc-2.ifc_run
+	gfortran -O3 -openmp -p -lapr-1 binarytrees.ifc-2.f90 -o binarytrees.ifc-2.ifc_run
 
 measure:
 	sudo modprobe msr

@@ -69,3 +69,4 @@ target/
 *.ifc_run
 fort.5
 fort.6
+*.mod
