@@ -6,7 +6,11 @@ edition = "2021"
 [dependencies]
 futures = "0.3.31"
 futures-cpupool = "0.1.8"
+hashbrown = "0.15.2"
+itertools = "0.13.0"
+num = "0.4.3"
 ordermap = "0.5.4"
+tokio-threadpool = "0.1.18"
 
 [profile.release]
 opt-level = 3
