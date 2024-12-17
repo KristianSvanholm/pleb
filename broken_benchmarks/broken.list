@@ -1,0 +1,82 @@
+Csharp & Fsharp
+- pidigits
+    unable to load shared library 'gmp'
+
+Haskell
+- Fannkuch-redux
+    GHC-39999
+
+Ruby
+- Binary trees, fannkuch-redux, mandelbrot
+    thread.exclusive
+- pidigits
+    No such file to load -- gmp
+
+Typescript
+- All compiling is broken. Only run works because compile results was included
+
+Java
+- K-nucleotide
+    fastutil import breaks
+- Pidigits
+    finalize() in Object has been deprecated and marked for removal
+    no jgmplib in java.library.path
+
+Pascal
+- Regex-redux
+    libpcre: No such file or directory
+- Pidigits
+    gmp.pas: Can't determine which overloaded function to call
+
+Rust -- Likely solution, lower versions of dependencies / rustc
+- k-nucleotide
+    No method 'wait' found ofr 'CpuFuture'
+- Fasta
+    Use of deprecated 'try' macro
+
+Go
+- Regex-redux
+    type pcre.Regexp has no field or method Matcher
+    exec: "pkg-config": executable file not found in path
+
+JavaScript
+- Mandelbrot
+    Cannot distribute equal across cpus. Have 6 cores, 12 threads. When using 12k input instead of 16k, it works.
+
+Lisp
+- Binary-trees
+    undefined function
+- Regex-redux
+    Unknown error
+
+Perl
+- pidigits
+    Cannot find module Math::GMP
+- Regex-redux
+    Old package separator used in string [NON BREAKING]
+
+Fortran
+- pidigits
+    unexpected xyz
+- Reverse-complement
+    No output...
+
+Lua
+- Pidigits
+    cmp missing
+
+
+-- Packages missing from nix package manager or not packaged for apple silicon at required legacy --
+
+-- missing
+Chapel
+Hack
+Graal
+Swift
+
+-- apple
+Ada
+Julia
+Dart
+Ocaml
+
