@@ -29,15 +29,14 @@ inputs = {
 			    go
 			    fsharp
 			    gfortran # Fortran [ifx would not work for apple]
-			    jruby
 			    ruby
+			    jruby
 			    nodejs_23 # JavaScript
 			    sbcl # Lisp
 			    lua
 			    fpc # Pascal
 			    perl
 			    racket
-			    ruby
 			    swift
 			    dotnet-sdk
 			    typescript
@@ -68,13 +67,20 @@ inputs = {
 			    apr
 
 			    #pcre
+			    hyperscan
 			    pcre
+
+			    #binutils / ld
+			    binutils
 
 			    #khash
 			    htslib
 
 			    #Regex
 			    boost
+
+			    #pkg-config
+			    pkg-config
 
 
 			    ### Is not packaged for apple silicon currently, or at required legacy
