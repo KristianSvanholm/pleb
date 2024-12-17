@@ -2,4 +2,6 @@ module regex-redux
 
 go 1.23.3
 
-require github.com/glenn-brown/golang-pkg-pcre v0.0.0-20120522223659-48bb82a8b8ce // indirect
+require (
+	github.com/GRbit/go-pcre v1.0.1 // indirect
+)
