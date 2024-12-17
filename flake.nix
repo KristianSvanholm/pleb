@@ -4,8 +4,8 @@ inputs = {
 	nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 	flake-utils.url = "github:numtide/flake-utils";
 	old-ocaml.url = "github:nixos/nixpkgs/54c1e44240d8a527a8f4892608c4bce5440c3ecb";
-	old-dart.url = "github:nixos/nixpkgs/733b33a07eac62a01f738f4bf15aa46b4c84168b";
-	old-ghc.url = "github:nixos/nixpkgs/80c24eeb9ff46aa99617844d0c4168659e35175f";
+	#old-dart.url = "github:nixos/nixpkgs/733b33a07eac62a01f738f4bf15aa46b4c84168b";
+	#old-ghc.url = "github:nixos/nixpkgs/80c24eeb9ff46aa99617844d0c4168659e35175f";
 	#hhvm.url = "github:nixos/nixpkgs/db8a4a4ef5644652bba98243805323eb7bf10404";
     };
 
@@ -40,6 +40,7 @@ inputs = {
 			    swift
 			    dotnet-sdk
 			    typescript
+
 	    		    #inputs.hhvm.legacyPackages.${system}.hhvm
 			    #hhvm # Hack. Cant get this to work yet.
 			    #gnu-smalltalk # Smalltalk
