@@ -48,7 +48,8 @@ compiled/
 # Rust
 target/
 
-# C++
+# C++ / C
+*.gcc_run
 *.gpp_run
 *.out
 
