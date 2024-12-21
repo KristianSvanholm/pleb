@@ -1,10 +1,10 @@
+"use strict";
 /* The Computer Language Benchmarks Game
    http://benchmarksgame.alioth.debian.org/
 
    by Josh Goldfoot, adapted from the node.js version
    compile with tsc --lib es7 regexredux.ts
 */
-"use strict";
 /// <reference path="../node_modules/@types/node/index.d.ts" />
 var fs = require("fs");
 var i = fs.readFileSync("/dev/stdin", "ascii");

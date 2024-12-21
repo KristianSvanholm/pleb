@@ -1,3 +1,4 @@
+"use strict";
 /* The Computer Language Benchmarks Game
    http://benchmarksgame.alioth.debian.org/
 
@@ -5,8 +6,12 @@
    based on Node.js version by Roman Pletnev
    which was in turn based on C/Dart programs by Petr Prokhorenkov/Jos Hirth et al.
  */
-"use strict";
+/// <reference path="../node_modules/@types/node/index.d.ts" />
 class Out {
+    out_buffer_size;
+    limit;
+    buf;
+    ct;
     constructor() {
         this.out_buffer_size = 256 * 1024;
         this.limit = this.out_buffer_size - 2 * LINE_LEN - 1;
