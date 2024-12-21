@@ -1,5 +1,21 @@
 # Thesis
-Cross platform process energy benchmarking tool.
+Cross platform programming language energy benchmarking tool.
+
+## Dependencies
+
+- Nix package manager with flakes enabled
+
+then:
+
+`nix develop` to install the rest of the dependencies to a temporary shell.
+
+## Running it
+
+On macos, simply `cargo run`
+
+On Linux, you need sudo. `cargo build`, then navigate to `target/debug/` and run the program with `sudo ./thesis`
+
+Optional flag `-r` sets count of revisions per task.
 
 ## MacOS
 Utilizes IOReport, an undocumented Apple API.
