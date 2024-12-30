@@ -1,5 +1,4 @@
 compile:
-	cp nbody.jruby-2.jruby nbody.rb
 
 measure:
 	sudo modprobe msr

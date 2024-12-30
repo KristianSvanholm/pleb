@@ -1,5 +1,4 @@
 compile:
-	cp revcomp.jruby revcomp.rb
 
 measure:
 	sudo modprobe msr

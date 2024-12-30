@@ -1,5 +1,4 @@
 compile:
-	cp pidigits.jruby pidigits.rb
 
 measure:
 	sudo modprobe msr

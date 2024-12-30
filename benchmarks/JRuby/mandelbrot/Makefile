@@ -1,5 +1,4 @@
 compile:
-	cp mandelbrot.jruby-4.jruby mandelbrot.rb
 
 measure:
 	sudo modprobe msr

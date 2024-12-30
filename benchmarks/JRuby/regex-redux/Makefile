@@ -1,5 +1,4 @@
 compile:
-	cp regexredux.jruby-2.jruby regexredux.rb
 
 measure:
 	sudo modprobe msr
