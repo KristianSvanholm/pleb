@@ -6,7 +6,7 @@
 // Ported to C++ with minor changes by Dave Compton
 //
 // compile with following g++ flags
-//  -pipe -Wall -O3  -fomit-frame-pointer -march=native -mfpmath=sse -msse2 -fopenmp   -mno-fma --std=c++14 
+//   -Wall -O3  -fomit-frame-pointer -march=native  -fopenmp   -mno-fma --std=c++14 
 
 #include <immintrin.h>
 #include <iostream>

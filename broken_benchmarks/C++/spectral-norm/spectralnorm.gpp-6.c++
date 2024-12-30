@@ -7,7 +7,7 @@
 // Add SSE by The Anh Tran
 // Additional SSE optimization by Krzysztof Jakubowski
 
-// g++ -pipe -O3 -march=native -fopenmp -mfpmath=sse -msse2 \
+// g++  -O3 -march=native -fopenmp  \
 //     ./spec.c++ -o ./spec.run
 
 #include <cmath>

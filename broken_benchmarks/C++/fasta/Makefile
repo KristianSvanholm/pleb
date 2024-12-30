@@ -1,5 +1,5 @@
 compile:
-	g++ -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=c++17 fasta.gpp-9.c++ -o fasta.gpp-9.c++.o &&  \
+	g++ -c  -O3 -fomit-frame-pointer -std=c++17 fasta.gpp-9.c++ -o fasta.gpp-9.c++.o &&  \
         g++ fasta.gpp-9.c++.o -o fasta.gpp-9.gpp_run -lpthread 
 
 
