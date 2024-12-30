@@ -23,13 +23,11 @@ inputs = {
 			buildInputs = [
 			    python312 
 			    libgcc # C/C++
-			    rustup # Rust
 			    jdk # Java
 			    erlang 
 			    go
 			    fsharp
 			    gfortran # Fortran [ifx would not work for apple]
-			    ruby
 			    jruby
 			    nodejs_23 # JavaScript
 			    sbcl # Lisp
@@ -37,15 +35,17 @@ inputs = {
 			    fpc # Pascal
 			    perl
 			    racket
-			    swift
 			    dotnet-sdk
 			    typescript
-
-	    		    #inputs.hhvm.legacyPackages.${system}.hhvm
+    
+			    #inputs.hhvm.legacyPackages.${system}.hhvm
 			    #hhvm # Hack. Cant get this to work yet.
 			    #gnu-smalltalk # Smalltalk
 			    #graalvm-ce # Java Graal
-
+    
+			    # Rust
+			    rustc
+			    cargo
 
 			    # php
 			    (php.buildEnv {
@@ -68,7 +68,6 @@ inputs = {
 			    apr
 
 			    #pcre
-			    hyperscan
 			    pcre
 
 			    #binutils / ld
