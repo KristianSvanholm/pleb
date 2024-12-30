@@ -36,6 +36,7 @@ Program.cs
 node_modules/
 
 # Pascal
+*.pas
 *.fpascal_run
 *.ppu
 
