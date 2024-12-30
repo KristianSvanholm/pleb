@@ -10,7 +10,12 @@ for meeting place state manipulation.
 
 #define _GNU_SOURCE
 #include <stdlib.h>
+
+#ifdef __APPLE__
+#else
 #include <malloc.h>
+#endif
+
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>

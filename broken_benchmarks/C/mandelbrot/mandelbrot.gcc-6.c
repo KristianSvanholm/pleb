@@ -10,7 +10,7 @@
 //    thereby reducing writes to the bitmap.
 //
 // compile with following gcc flags
-//  -pipe -Wall -O3 -ffast-math -fno-finite-math-only -march=native -mfpmath=sse -msse3 -fopenmp
+//   -Wall -O3 -ffast-math -fno-finite-math-only -march=native  -fopenmp
 
 
 #include <stdlib.h>
