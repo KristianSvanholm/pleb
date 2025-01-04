@@ -1,29 +1,48 @@
 mod benchmark;
 
 use benchmark::Exports;
-use clap::Parser;
+use clap::{Parser, Subcommand};
 use std::{io::Write, process::Command};
 use csv::Writer;
+
+#[derive(Subcommand, Debug, Clone)]
+enum Mode {
+    /// Run the benchmarks
+    Run {
+        /// Number of runs per task
+        #[arg(short, long, default_value_t = 1)]
+        runs: u64
+    },
+    /// Compile the benchmarks
+    Compile,
+}
 
 #[derive(Debug, Parser)]
 #[command(version, verbatim_doc_comment)]
 struct CLI {
-    #[arg(short, long, default_value_t = 11)]
-    runs: u64,
+    #[command(subcommand)]
+    mode: Mode,
+    /// Set path to benchmarks directory
+    #[arg(short, long, default_value="./benchmarks")]
+    path: String,
 }
 
 fn main() {
     let args = CLI::parse();
 
-
-    let exports = match benchmark::run("../../benchmarks", args.runs) {
-        Ok(exp) => exp,
-        Err(e) => {
-            println!("{}", e);
-            return;
-        }
+    let tasks = match benchmark::list_all(args.path) {
+        Ok(t) => t,
+        Err(e) => {println!("{}",e); return}
     };
 
+    match args.mode {
+        Mode::Run{runs} => run_and_export(tasks, runs),
+        Mode::Compile => benchmark::compile(tasks),
+    }
+}
+
+fn run_and_export(tasks: Vec<benchmark::Task>, runs: u64){
+    let Ok(exports) = benchmark::run(tasks, runs) else {panic!("AAAA")};
     let _ = csv(exports);
 }
 
@@ -44,15 +63,4 @@ fn csv(data: Vec<Exports>) -> Result<(), Box<dyn std::error::Error>> {
     file.write_all(data.as_bytes())?;
    
     Ok(())
-}
-
-fn generate_command(command: &str) -> Command {
-    let parts: Vec<&str> = command.split(" ").collect();
-    let mut cmd = Command::new(parts[0]);
-
-    for part in parts.into_iter().skip(1) {
-        cmd.arg(part);
-    }
-
-    cmd
 }

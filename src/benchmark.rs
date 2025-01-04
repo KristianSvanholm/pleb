@@ -55,11 +55,17 @@ impl fmt::Display for Exports {
     }
 }
 
-pub fn run(path: &str, runs: u64) -> io::Result<Vec<Exports>> {
-    let mut res: Vec<Exports> = vec![];
+pub struct Task {
+    path: String,
+    language: String,
+    name: String,
+}
+
+pub fn list_all(path: String) -> io::Result<Vec<Task>> {
+    let mut res :Vec<Task> = vec![];
 
     // For each language
-    for lang in fs::read_dir(path)? {
+    for lang in fs::read_dir(&path)? {
         let lang = lang?;
         let language_path = lang.path();
 
@@ -73,31 +79,38 @@ pub fn run(path: &str, runs: u64) -> io::Result<Vec<Exports>> {
             let task = task?;
             let task_path = task.path();
 
-            /*
-                For a faster runtime
-                if let Some(x) = task_path.to_str() {
-                    if !x.contains("C") {
-                        continue; 
-                }
-            }*/
-
             // Skip files found
             if !task_path.is_dir() {
                 continue
             }
 
             if let Some(str) = task.path().to_str() {
+
                 // Get language name and Task
                 let parts: Vec<&str> = str.split("/").collect();
 
-                // Create make command
-                let mut cmd = Command::new("make");
-                cmd.arg("-C").arg(str).arg("run");
-
-                // Run benchmark
-                res.push(benchmark(cmd, runs, parts[3],parts[4]));
+                res.push(Task{
+                    path: str.to_string(), 
+                    language:parts[1].to_string(),
+                    name: parts[2].to_string()
+                });
             }
-        }
+       }
+    }
+    Ok(res)
+
+}
+
+pub fn run(tasks: Vec<Task>, runs: u64) -> io::Result<Vec<Exports>> {
+    let mut res: Vec<Exports> = vec![];
+
+    for task in tasks {
+        // Create make command
+        let mut cmd = Command::new("make");
+        cmd.arg("-C").arg(task.path).arg("run");
+
+        // Run benchmark
+        res.push(benchmark(cmd, runs, &task.language, &task.name));
     }
 
     Ok(res)
@@ -117,7 +130,7 @@ pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str) -> Exports
 
         match cmd.output() {
             Ok(_) => (),
-            Err(e) => println!("{}", e),
+            Err(e) => panic!("Encountered error during benchmark: {}", e),
         };
 
         let energy = sampler.sample_end(start);
@@ -130,6 +143,23 @@ pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str) -> Exports
     }
 
     Exports(exports)
+}
+
+pub fn compile(tasks: Vec<Task>) {
+    for task in tasks {
+        // Create make command
+        let mut cmd = Command::new("make");
+        cmd.arg("-C").arg(task.path).arg("compile");
+        let out = match cmd.output() {
+            Ok(out) => out,
+            Err(e) => {
+                println!("Encountered an error while compiling {} - {}: {}",e, task.language, task.name);
+                continue
+            }
+        };
+        let Ok(stderr) = String::from_utf8(out.stderr) else { continue };
+        println!("stderr:\n{}", stderr);
+    }
 }
 
 pub fn summarize(exports: Exports) -> Export {
