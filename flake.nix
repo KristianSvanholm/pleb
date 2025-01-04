@@ -89,6 +89,9 @@ inputs = {
 			    #inputs.old-dart.legacyPackages.${system}.dart # Dart 2.7.2
 			    #inputs.old-ocaml.legacyPackages.${system}.ocaml # Ocaml 4.14.1
 			];
+			shellHook = ''
+			    export RUBY=${pkgs.ruby}/bin/ruby
+			'';
 		    };
 		}
 	    );

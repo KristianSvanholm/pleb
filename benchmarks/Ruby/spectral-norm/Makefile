@@ -3,14 +3,14 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "ruby -W0 spectralnorm.yarv-5.yarv 5500" Ruby spectral-norm
+	sudo ../../RAPL/main "${RUBY} -W0 spectralnorm.yarv-5.yarv 5500" Ruby spectral-norm
 
 run:
-	ruby -W0 spectralnorm.yarv-5.yarv 5500
+	${RUBY} -W0 spectralnorm.yarv-5.yarv 5500
 
 mem:
-	/usr/bin/time -v ruby -W0 spectralnorm.yarv-5.yarv 5500
+	/usr/bin/time -v ${RUBY} -W0 spectralnorm.yarv-5.yarv 5500
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ruby -W0 spectralnorm.yarv-5.yarv 5500
+	valgrind --tool=massif --stacks=yes ${RUBY} -W0 spectralnorm.yarv-5.yarv 5500
 
