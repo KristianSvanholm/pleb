@@ -6,12 +6,12 @@ use linux::sampler::Sampler;
 #[cfg(target_os = "macos")]
 use macos::sampler::Sampler;
 
-use chrono::{Duration, Utc};
+use chrono::Utc;
 use core::fmt;
-use std::process::Command;
+use serde::Serialize;
 use std::fs::{self};
 use std::io;
-use serde::Serialize;
+use std::process::Command;
 
 #[derive(Debug, Default, Serialize)]
 pub struct Export {
@@ -62,7 +62,7 @@ pub struct Task {
 }
 
 pub fn list_all(path: String) -> io::Result<Vec<Task>> {
-    let mut res :Vec<Task> = vec![];
+    let mut res: Vec<Task> = vec![];
 
     // For each language
     for lang in fs::read_dir(&path)? {
@@ -81,24 +81,22 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
 
             // Skip files found
             if !task_path.is_dir() {
-                continue
+                continue;
             }
 
             if let Some(str) = task.path().to_str() {
-
                 // Get language name and Task
                 let parts: Vec<&str> = str.split("/").collect();
 
-                res.push(Task{
-                    path: str.to_string(), 
-                    language:parts[1].to_string(),
-                    name: parts[2].to_string()
+                res.push(Task {
+                    path: str.to_string(),
+                    language: parts[1].to_string(),
+                    name: parts[2].to_string(),
                 });
             }
-       }
+        }
     }
     Ok(res)
-
 }
 
 pub fn run(tasks: Vec<Task>, runs: u64) -> io::Result<Vec<Exports>> {
@@ -122,8 +120,7 @@ pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str) -> Exports
     let mut exports: Vec<Export> = vec![];
 
     for n in 0..runs {
-
-        println!("Running {} / {} - {}/{}", lang, task, n+1, runs);
+        println!("Running {} / {} - {}/{}", lang, task, n + 1, runs);
 
         let start_time = Utc::now().time();
         let start = sampler.sample_start();
@@ -135,11 +132,12 @@ pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str) -> Exports
 
         let energy = sampler.sample_end(start);
         let duration = Utc::now().time() - start_time;
-        exports.push(Export { 
-            language: lang.to_string(), 
-            task: task.to_string(), 
-            duration: duration.num_milliseconds(), 
-            energy });
+        exports.push(Export {
+            language: lang.to_string(),
+            task: task.to_string(),
+            duration: duration.num_milliseconds(),
+            energy,
+        });
     }
 
     Exports(exports)
@@ -153,8 +151,11 @@ pub fn compile(tasks: Vec<Task>) {
         let out = match cmd.output() {
             Ok(out) => out,
             Err(e) => {
-                println!("Encountered an error while compiling {} - {}: {}",e, task.language, task.name);
-                continue
+                println!(
+                    "Encountered an error while compiling {} - {}: {}",
+                    e, task.language, task.name
+                );
+                continue;
             }
         };
         let Ok(stderr) = String::from_utf8(out.stderr) else { continue };
@@ -162,14 +163,4 @@ pub fn compile(tasks: Vec<Task>) {
             println!("stderr:\n {}", stderr);
         }
     }
-}
-
-pub fn summarize(exports: Exports) -> Export {
-    let mut summary = Export::default();
-    for exp in exports.0 {
-        summary.energy += exp.energy;
-        summary.duration += exp.duration;
-    }
-
-    summary
 }
