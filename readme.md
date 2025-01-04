@@ -27,5 +27,9 @@ Followed [this](https://medium.com/@vladkens/how-to-get-macos-power-metrics-with
 ## Linux 
 Utilizes Powercap to access Intel RAPL. 
 
+### IMPORTANT
+Run the following command on your system once in order to use Intel RAPL without sudo. Running the program with sudo will not work correctly. The command will grant your user ownership of the Intel RAPL files
+`sudo chown -R $USER /sys/class/powercap/intel-rapl`
+
 Might add support for AMD RAPL in the future :)
 
