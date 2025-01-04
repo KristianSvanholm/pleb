@@ -158,7 +158,9 @@ pub fn compile(tasks: Vec<Task>) {
             }
         };
         let Ok(stderr) = String::from_utf8(out.stderr) else { continue };
-        println!("stderr:\n{}", stderr);
+        if stderr.len() != 0 {
+            println!("stderr:\n {}", stderr);
+        }
     }
 }
 
