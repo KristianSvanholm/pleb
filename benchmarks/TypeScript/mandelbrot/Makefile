@@ -4,10 +4,10 @@ compile:
 
 xmeasure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "node --use_strict mandelbrot.js 16000" TypeScript mandelbrot
+	sudo ../../RAPL/main "node --use_strict mandelbrot.js 12000" TypeScript mandelbrot
 
 run:
-	node --use_strict mandelbrot.js 16000
+	node --use_strict mandelbrot.js 12000
 
 clean:
 	rm -rf *.js *.ts
