@@ -57,8 +57,8 @@ impl fmt::Display for Exports {
 
 pub struct Task {
     path: String,
-    language: String,
-    name: String,
+    pub language: String,
+    pub name: String,
 }
 
 pub fn list_all(path: String) -> io::Result<Vec<Task>> {
@@ -86,12 +86,15 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
 
             if let Some(str) = task.path().to_str() {
                 // Get language name and Task
-                let parts: Vec<&str> = str.split("/").collect();
+                let mut parts: Vec<&str> = str.split("/").collect();
+
+                // Reverse array
+                parts = parts.into_iter().rev().collect();
 
                 res.push(Task {
                     path: str.to_string(),
                     language: parts[1].to_string(),
-                    name: parts[2].to_string(),
+                    name: parts[0].to_string(),
                 });
             }
         }
