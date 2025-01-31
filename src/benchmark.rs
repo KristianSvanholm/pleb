@@ -8,6 +8,7 @@ use macos::sampler::Sampler;
 
 use chrono::Utc;
 use core::fmt;
+use std::collections::HashMap;
 use serde::Serialize;
 use std::fs::{self};
 use std::io;
@@ -33,28 +34,7 @@ impl fmt::Display for Export {
     }
 }
 
-#[derive(Serialize)]
-pub struct Exports(pub Vec<Export>);
-
-impl fmt::Display for Exports {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Results:\n")?;
-        for (i, v) in self.0.iter().enumerate() {
-            write!(
-                f,
-                "{} - {} - {:>2} - {:>10} µj, {:>3} ms, {:>10.5} w\n",
-                v.language,
-                v.task,
-                i,
-                v.energy,
-                v.duration,
-                v.energy / v.duration as f64
-            )?;
-        }
-        Ok(())
-    }
-}
-
+#[derive(Clone, Eq, Hash, PartialEq)]
 pub struct Task {
     path: String,
     pub language: String,
@@ -102,48 +82,55 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
     Ok(res)
 }
 
-pub fn run(tasks: Vec<Task>, runs: u64) -> io::Result<Vec<Exports>> {
-    let mut res: Vec<Exports> = vec![];
+pub fn run(tasks: Vec<Task>, runs: u64) -> io::Result<Vec<Export>> {
+    let mut res: Vec<Export> = vec![];
+
+    let mut counts: HashMap<Task, u64> = HashMap::new();
 
     for task in tasks {
+
+        counts.entry(task.clone()).and_modify(|c| *c+=1).or_insert(1);
+
         // Create make command
         let mut cmd = Command::new("make");
-        cmd.arg("-C").arg(task.path).arg("run");
+        cmd.arg("-C").arg(&task.path).arg("run");
 
+        let count = match counts.get(&task) {
+            Some(c) => c,
+            None => &1,
+        };
         // Run benchmark
-        res.push(benchmark(cmd, runs, &task.language, &task.name));
+        res.push(benchmark(cmd, runs, &task.language, &task.name, *count));
     }
+
+    res.sort_unstable_by_key(|item| (item.language.to_owned(), item.task.to_owned()));
 
     Ok(res)
 }
 
-pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str) -> Exports {
+pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str, i: u64) -> Export {
     let sampler = Sampler::new();
 
-    let mut exports: Vec<Export> = vec![];
+    println!("Running {} / {} - {}/{}", lang, task, i, runs);
 
-    for n in 0..runs {
-        println!("Running {} / {} - {}/{}", lang, task, n + 1, runs);
+    let start_time = Utc::now().time();
+    let start = sampler.sample_start();
 
-        let start_time = Utc::now().time();
-        let start = sampler.sample_start();
+    
+    match cmd.output() {
+        Ok(_) => (),
+        Err(e) => panic!("Encountered error during benchmark: {}", e),
+    };
 
-        match cmd.output() {
-            Ok(_) => (),
-            Err(e) => panic!("Encountered error during benchmark: {}", e),
-        };
+    let energy = sampler.sample_end(start);
+    let duration = Utc::now().time() - start_time;
 
-        let energy = sampler.sample_end(start);
-        let duration = Utc::now().time() - start_time;
-        exports.push(Export {
-            language: lang.to_string(),
-            task: task.to_string(),
-            duration: duration.num_milliseconds(),
-            energy,
-        });
+    Export {
+        language: lang.to_string(),
+        task: task.to_string(),
+        duration: duration.num_milliseconds(),
+        energy,
     }
-
-    Exports(exports)
 }
 
 pub fn compile(tasks: Vec<Task>) {

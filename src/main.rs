@@ -1,9 +1,12 @@
 mod benchmark;
 
-use benchmark::Exports;
+use benchmark::Export;
 use clap::{Parser, Subcommand};
 use csv::Writer;
 use std::io::Write;
+
+use rand::rng;
+use rand::seq::SliceRandom;
 
 #[derive(Subcommand, Debug, Clone)]
 enum Mode {
@@ -12,6 +15,9 @@ enum Mode {
         /// Number of runs per task
         #[arg(short, long, default_value_t = 1)]
         runs: u64,
+        /// Run benchmarks in order
+        #[arg(short, long, action)]
+        ordered: bool
     },
     /// Compile the benchmarks
     Compile,
@@ -48,7 +54,7 @@ fn main() {
     tasks = filter_list(tasks, args.language.as_deref(), args.task.as_deref());
 
     match args.mode {
-        Mode::Run { runs } => run_and_export(tasks, runs),
+        Mode::Run { runs, ordered } => run_and_export(tasks, runs, ordered),
         Mode::Compile => benchmark::compile(tasks),
     }
 }
@@ -61,19 +67,29 @@ fn filter_list(tasks: Vec<benchmark::Task>, lang: Option<&str>, name: Option<&st
         .collect()
 }
 
-fn run_and_export(tasks: Vec<benchmark::Task>, runs: u64) {
+fn run_and_export(unique_tasks: Vec<benchmark::Task>, runs: u64, ordered: bool) {
+    
+    let mut tasks = vec![];
+    for ut in unique_tasks {
+        for _ in 0..runs {
+            tasks.push(ut.clone());
+        }
+    }
+
+    if !ordered {
+        tasks.shuffle(&mut rng());
+    }
+
     let Ok(exports) = benchmark::run(tasks, runs) else { panic!("AAAA") };
     let _ = csv(exports);
 }
 
 use std::fs::File;
-fn csv(data: Vec<Exports>) -> Result<(), Box<dyn std::error::Error>> {
+fn csv(data: Vec<Export>) -> Result<(), Box<dyn std::error::Error>> {
     // Serialize to CSV
     let mut writer = Writer::from_writer(vec![]);
-    for lang in data {
-        for itt in lang.0 {
-            writer.serialize(itt)?;
-        }
+    for itt in data {
+        writer.serialize(itt)?;
     }
 
     // Write data to CSV
