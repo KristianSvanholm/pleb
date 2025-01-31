@@ -53,6 +53,13 @@ fn main() {
     // Filter out unwanted tasks
     tasks = filter_list(tasks, args.language.as_deref(), args.task.as_deref());
 
+    let str = match args.mode {
+        Mode::Run{ .. } => "Running",
+        Mode::Compile => "Compiling"
+    };
+
+    println!("{} {} benchmarks ...", str, tasks.len());
+
     match args.mode {
         Mode::Run { runs, ordered } => run_and_export(tasks, runs, ordered),
         Mode::Compile => benchmark::compile(tasks),
