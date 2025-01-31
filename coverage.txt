@@ -1,0 +1,35 @@
+[Tasks]
+Spectral-norm: 21
+N-body: 21
+Fasta: 20
+Reverse-complement: 20
+Mandelbrot: 20
+Fannkuch-redux: 19
+Binary-trees: 19
+K-nucleotide: 17
+Regex-redux : 14
+Pidigits : 10
+Chameneos-redux : 3 
+
+[Languages]
+C++: 11
+Python: 10
+Racket: 10
+CSharp: 10
+JRuby: 10
+Erlang: 10
+TypeScript: 10
+Php: 10
+Lua: 9
+javaScript: 9
+FSharp: 9
+Go: 9
+C: 8
+Perl: 8
+Rust: 8
+Java: 8
+Lisp: 8
+Fortran: 7
+Pascal: 7
+Ruby: 6
+Haskell: 6
