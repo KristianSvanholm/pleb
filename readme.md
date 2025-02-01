@@ -11,11 +11,13 @@ then:
 
 ## Running it
 
-On macos, simply `cargo run`
+You can run the program either directly via `cargo` through `cargo run`.  
+Otherwise compile it with `cargo build` and run the binary.  
 
-On Linux, you need sudo. `cargo build`, then navigate to `target/debug/` and run the program with `sudo ./thesis`
+Adding the flag `--help` will provide detailed instructions on how to utilize the programme.
 
-Optional flag `-r` sets count of revisions per task.
+### Note
+You need to run `compile` at least once before you can do a `run`.
 
 ## MacOS
 Utilizes IOReport, an undocumented Apple API.
@@ -28,8 +30,10 @@ Followed [this](https://medium.com/@vladkens/how-to-get-macos-power-metrics-with
 Utilizes Powercap to access Intel RAPL. 
 
 ### IMPORTANT
-Run the following command on your system once in order to use Intel RAPL without sudo. Running the program with sudo will not work correctly. The command will grant your user ownership of the Intel RAPL files
-`sudo chown -R $USER /sys/class/powercap/intel-rapl`
+
+You need to take ownership of the intel RAPL files for the program to work correctly.  
+The ownership state of the files reset after each system reboot, so you'll run this command regularily.  
+`sudo chown -R $USER /sys/class/powercap/intel-rapl/intel-rapl:0/`
 
 Might add support for AMD RAPL in the future :)
 
