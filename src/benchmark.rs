@@ -11,7 +11,7 @@ use core::fmt;
 use std::collections::HashMap;
 use serde::Serialize;
 use std::fs::{self};
-use std::io;
+use std::{io, thread, time};
 use std::process::Command;
 
 #[derive(Debug, Default, Serialize)]
@@ -82,19 +82,29 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
     Ok(res)
 }
 
-pub fn run(tasks: Vec<Task>, runs: u64) -> io::Result<Vec<Export>> {
+pub fn run(tasks: Vec<Task>, runs: u64, cooldown: u64) -> io::Result<Vec<Export>> {
     let mut res: Vec<Export> = vec![];
 
     let mut counts: HashMap<Task, u64> = HashMap::new();
 
+    let mut first = true; 
     for task in tasks {
+        // Cooldown between benchmarks
+        if first {
+            first = false
+        } else {
+            println!("Cooling down for {} seconds", &cooldown);
+            thread::sleep(time::Duration::from_secs(cooldown));
+        }
 
+        // Count runs for each benchmark
         counts.entry(task.clone()).and_modify(|c| *c+=1).or_insert(1);
 
         // Create make command
         let mut cmd = Command::new("make");
         cmd.arg("-C").arg(&task.path).arg("run");
 
+        // Fetch benchmark count
         let count = match counts.get(&task) {
             Some(c) => c,
             None => &1,

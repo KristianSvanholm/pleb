@@ -17,7 +17,10 @@ enum Mode {
         runs: u64,
         /// Run benchmarks in order
         #[arg(short, long, action)]
-        ordered: bool
+        ordered: bool,
+        /// How many seconds delay between each benchmark
+        #[arg(short,long, default_value_t = 0)]
+        cooldown: u64
     },
     /// Compile the benchmarks
     Compile,
@@ -61,7 +64,7 @@ fn main() {
     println!("{} {} benchmarks ...", str, tasks.len());
 
     match args.mode {
-        Mode::Run { runs, ordered } => run_and_export(tasks, runs, ordered),
+        Mode::Run { runs, ordered, cooldown } => run_and_export(tasks, runs, ordered, cooldown),
         Mode::Compile => benchmark::compile(tasks),
     }
 }
@@ -74,7 +77,7 @@ fn filter_list(tasks: Vec<benchmark::Task>, lang: Option<&str>, name: Option<&st
         .collect()
 }
 
-fn run_and_export(unique_tasks: Vec<benchmark::Task>, runs: u64, ordered: bool) {
+fn run_and_export(unique_tasks: Vec<benchmark::Task>, runs: u64, ordered: bool, cooldown: u64) {
     
     let mut tasks = vec![];
     for ut in unique_tasks {
@@ -87,7 +90,7 @@ fn run_and_export(unique_tasks: Vec<benchmark::Task>, runs: u64, ordered: bool) 
         tasks.shuffle(&mut rng());
     }
 
-    let Ok(exports) = benchmark::run(tasks, runs) else { panic!("AAAA") };
+    let Ok(exports) = benchmark::run(tasks, runs, cooldown) else { panic!("AAAA") };
     let _ = csv(exports);
 }
 
