@@ -11,7 +11,7 @@ then:
 
 ## Running it
 
-You can run the program either directly via `cargo` through `cargo run`.  
+You can run the program either directly via `cargo` through `cargo run --`.  
 Otherwise compile it with `cargo build` and run the binary.  
 
 Adding the flag `--help` will provide detailed instructions on how to utilize the programme.
