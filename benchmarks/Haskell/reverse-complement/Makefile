@@ -1,5 +1,4 @@
 compile:
-	cp revcomp.ghc-3.ghc revcomp.ghc-3.hs
 	ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -funfolding-use-threshold=32 -XMagicHash -XUnboxedTuples revcomp.ghc-3.hs -o revcomp.ghc-3.ghc_run
 measure:
 	sudo modprobe msr

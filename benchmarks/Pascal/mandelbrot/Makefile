@@ -1,5 +1,4 @@
 compile:
-	cp mandelbrot.fpascal-5.fpascal mandelbrot.fpascal-5.pas
 	fpc -FuInclude/fpascal -XXs -O4 -Tlinux  -oFPASCAL_RUN mandelbrot.fpascal-5.pas
 	mv FPASCAL_RUN mandelbrot.fpascal-5.fpascal_run
 	rm mandelbrot.fpascal-5.pas

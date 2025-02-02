@@ -1,5 +1,4 @@
 compile:
-	cp regexredux.java-3.java regexredux.java
 	javac -d .  regexredux.java
 measure:
 	sudo modprobe msr

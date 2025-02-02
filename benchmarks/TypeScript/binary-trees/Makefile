@@ -1,5 +1,4 @@
 compile:
-	cp binarytrees.typescript-2.typescript binarytrees.typescript-2.ts
 	tsc --alwaysStrict -t ESNEXT  binarytrees.typescript-2.ts
 
 measure:

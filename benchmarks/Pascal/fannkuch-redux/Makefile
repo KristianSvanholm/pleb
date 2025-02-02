@@ -1,5 +1,4 @@
 compile:
-	cp fannkuchredux.fpascal fannkuchredux.pas
 	fpc -FuInclude/fpascal -XXs -O4 -Tlinux -oFPASCAL_RUN fannkuchredux.pas
 	mv FPASCAL_RUN fannkuchredux.fpascal_run
 	rm fannkuchredux.pas

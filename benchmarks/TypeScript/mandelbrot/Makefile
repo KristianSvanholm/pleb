@@ -1,5 +1,4 @@
 compile:
-	cp mandelbrot.typescript mandelbrot.ts
 	tsc --alwaysStrict -t ESNEXT  mandelbrot.ts
 
 xmeasure:

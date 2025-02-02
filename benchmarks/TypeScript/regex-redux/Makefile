@@ -1,5 +1,4 @@
 compile:
-	cp regexredux.typescript-3.typescript regexredux.typescript-3.ts
 	tsc --alwaysStrict -t ESNEXT --lib es7 regexredux.typescript-3.ts
 
 measure:

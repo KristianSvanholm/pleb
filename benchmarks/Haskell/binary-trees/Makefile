@@ -1,5 +1,4 @@
 compile:
-	cp binarytrees.ghc binarytrees.hs
 	ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -funbox-strict-fields binarytrees.hs -o binarytrees.ghc_run
 
 measure:

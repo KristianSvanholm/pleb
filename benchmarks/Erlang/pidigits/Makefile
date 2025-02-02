@@ -1,5 +1,4 @@
 compile:
-	cp pidigits.hipe pidigits.erl
 	erlc +native +"{hipe, [o3]}" pidigits.erl
 measure:
 	sudo modprobe msr

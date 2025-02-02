@@ -1,5 +1,4 @@
 compile:
-	cp mandelbrot.java-2.java mandelbrot.java
 	javac -d .  mandelbrot.java
 measure:
 	sudo modprobe msr

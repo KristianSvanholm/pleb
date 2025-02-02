@@ -1,5 +1,4 @@
 compile:
-	cp nbody.ghc-2.ghc nbody.ghc-2.hs
 	ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts  nbody.ghc-2.hs -o nbody.ghc-2.ghc_run
 measure:
 	sudo modprobe msr

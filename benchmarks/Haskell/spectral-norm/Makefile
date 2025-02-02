@@ -1,5 +1,4 @@
 compile:
-	cp spectralnorm.ghc-4.ghc spectralnorm.ghc-4.hs
 	ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -XMagicHash spectralnorm.ghc-4.hs -o spectralnorm.ghc-4.ghc_run
 measure:
 	sudo modprobe msr

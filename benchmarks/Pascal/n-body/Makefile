@@ -1,5 +1,4 @@
 compile:
-	cp nbody.fpascal nbody.pas
 	fpc -FuInclude/fpascal -XXs -O4 -Tlinux -CfSSE3 -oFPASCAL_RUN nbody.pas
 	mv FPASCAL_RUN nbody.fpascal_run
 	rm nbody.pas

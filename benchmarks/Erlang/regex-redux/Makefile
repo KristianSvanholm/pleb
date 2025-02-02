@@ -1,5 +1,4 @@
 compile:
-	cp regexredux.hipe-6.hipe regexredux.erl
 	erlc +native +"{hipe, [o3]}" regexredux.erl
 xmeasure:
 	sudo modprobe msr

@@ -1,5 +1,4 @@
 compile:
-	cp fasta.csharpcore Program.cs
 	dotnet build -c Release
 
 measure:

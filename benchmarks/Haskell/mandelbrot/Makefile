@@ -1,5 +1,4 @@
 compile:
-	cp mandelbrot.ghc-2.ghc mandelbrot.ghc-2.hs
 	ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts  mandelbrot.ghc-2.hs -o mandelbrot.ghc-2.ghc_run
 measure:
 	sudo modprobe msr

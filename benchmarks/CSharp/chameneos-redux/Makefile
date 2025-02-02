@@ -1,5 +1,4 @@
 compile:
-	cp chameneosredux.csharpcore Program.cs
 	dotnet build -c Release
 
 measure:

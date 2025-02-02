@@ -1,5 +1,4 @@
 compile:
-	cp fasta.typescript fasta.ts
 	tsc --alwaysStrict -t ESNEXT  fasta.ts
 
 measure:

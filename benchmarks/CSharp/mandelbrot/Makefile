@@ -1,5 +1,4 @@
 compile:
-	cp mandelbrot.csharpcore-5.csharpcore Program.cs
 	dotnet build -c Release
 
 measure:

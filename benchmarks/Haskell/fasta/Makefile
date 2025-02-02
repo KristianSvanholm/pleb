@@ -1,5 +1,4 @@
 compile:
-	cp fasta.ghc-2.ghc fasta.ghc-2.hs
 	ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -XOverloadedStrings fasta.ghc-2.hs -o fasta.ghc-2.ghc_run
 measure:
 	sudo modprobe msr

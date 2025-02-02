@@ -1,5 +1,4 @@
 compile:
-	cp revcomp.fpascal-2.fpascal revcomp.fpascal-2.pas
 	fpc -FuInclude/fpascal -XXs -O4 -Tlinux -oFPASCAL_RUN revcomp.fpascal-2.pas
 	mv FPASCAL_RUN revcomp.fpascal-2.fpascal_run
 	rm revcomp.fpascal-2.pas

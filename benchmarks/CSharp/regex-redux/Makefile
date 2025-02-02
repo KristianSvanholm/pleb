@@ -1,5 +1,4 @@
 compile:
-	cp regexredux.csharpcore-4.csharpcore Program.cs
 	dotnet build -c Release
 
 measure:

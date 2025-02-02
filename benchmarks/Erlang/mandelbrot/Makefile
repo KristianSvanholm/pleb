@@ -1,5 +1,4 @@
 compile:
-	cp mandelbrot.hipe-2.hipe mandelbrot.erl
 	erlc +native +"{hipe, [o3]}" mandelbrot.erl
 measure:
 	sudo modprobe msr

@@ -1,5 +1,4 @@
 compile:
-	cp mandelbrot.fsharpcore-3.fsharpcore Program.fs
 	dotnet build -c Release
 
 measure:
