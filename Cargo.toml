@@ -11,6 +11,8 @@ unreachable_code = "allow"
 [profile.release]
 panic = "abort"
 strip = false
+opt-level = 3
+lto = true
 
 [dependencies]
 chrono = "0.4.38"
