@@ -1,6 +1,7 @@
 mod benchmark;
 
 use benchmark::Export;
+use std::collections::HashMap;
 use chrono::Utc;
 use clap::{Parser, Subcommand};
 use csv::Writer;
@@ -41,6 +42,9 @@ struct CLI {
     /// Set task filter
     #[arg(short, long)]
     task: Option<String>,
+    /// Whether to display task and langauge coverage matrix or not
+    #[arg(short,long, action)]
+    matrix: bool,
 }
 
 fn main() {
@@ -60,6 +64,8 @@ fn main() {
     // Filter out unwanted tasks
     tasks = filter_list(tasks, args.language.as_deref(), args.task.as_deref());
 
+    if args.matrix { matrix(tasks.clone()); }
+
     let str = match args.mode {
         Mode::Run{ .. } => "Running",
         Mode::Compile => "Compiling"
@@ -74,6 +80,30 @@ fn main() {
 
     let duration = Utc::now().time() - start_time;
     println!("Process took {} second(s)", duration.num_seconds())
+}
+
+// Way too big for a terminal, but whatever
+fn matrix(tasks: Vec<benchmark::Task>) {
+    let mut map: HashMap<String, HashMap<String, bool>> = HashMap::new();
+    let mut names = HashMap::new();
+    for task in tasks {
+        let t = task.clone();
+        map.entry(t.language).or_insert_with(HashMap::new).insert(t.name.clone(), true);
+        names.entry(t.name).or_insert(true);
+    }
+
+    print!("{:11}", "");
+    for (unique_task, _) in names.clone() {
+        print!("{:^18}", unique_task)
+    }
+    print!("\n");
+    for (lang, value) in map {
+        print!("{:11}", lang);
+        for (unique_task, _) in names.clone() {
+            print!("{:^18}", if value.get(&unique_task).is_some() {"x"} else {""});
+        }
+        print!("\n")
+    }
 }
 
 fn filter_list(tasks: Vec<benchmark::Task>, lang: Option<&str>, name: Option<&str>) -> Vec<benchmark::Task> {
