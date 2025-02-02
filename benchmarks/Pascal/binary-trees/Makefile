@@ -1,7 +1,6 @@
 compile:
 	fpc -FuInclude/fpascal -XXs -O4 -Tlinux  -oFPASCAL_RUN binarytrees.pas
 	mv FPASCAL_RUN binarytrees.fpascal_run
-	rm binarytrees.pas
 	
 measure:
 	sudo modprobe msr
