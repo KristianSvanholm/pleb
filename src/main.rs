@@ -1,6 +1,7 @@
 mod benchmark;
 
 use benchmark::Export;
+use chrono::Utc;
 use clap::{Parser, Subcommand};
 use csv::Writer;
 use std::io::Write;
@@ -43,6 +44,9 @@ struct CLI {
 }
 
 fn main() {
+
+    let start_time = Utc::now().time();
+
     let args = CLI::parse();
 
     let mut tasks = match benchmark::list_all(args.path) {
@@ -67,6 +71,9 @@ fn main() {
         Mode::Run { runs, ordered, cooldown } => run_and_export(tasks, runs, ordered, cooldown),
         Mode::Compile => benchmark::compile(tasks),
     }
+
+    let duration = Utc::now().time() - start_time;
+    println!("Process took {} second(s)", duration.num_seconds())
 }
 
 fn filter_list(tasks: Vec<benchmark::Task>, lang: Option<&str>, name: Option<&str>) -> Vec<benchmark::Task> {
@@ -90,7 +97,7 @@ fn run_and_export(unique_tasks: Vec<benchmark::Task>, runs: u64, ordered: bool, 
         tasks.shuffle(&mut rng());
     }
 
-    let Ok(exports) = benchmark::run(tasks, runs, cooldown) else { panic!("AAAA") };
+    let Ok(exports) = benchmark::run(tasks, runs, cooldown) else { panic!("Something has gone terribly wrong :(") };
     let _ = csv(exports);
 }
 
