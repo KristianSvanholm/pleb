@@ -71,6 +71,10 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
                 // Reverse array
                 parts = parts.into_iter().rev().collect();
 
+                if parts[0].to_string() == "node_modules" {
+                    continue
+                }
+
                 res.push(Task {
                     path: str.to_string(),
                     language: parts[1].to_string(),
