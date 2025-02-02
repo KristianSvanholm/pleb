@@ -93,7 +93,7 @@ pub fn run(tasks: Vec<Task>, runs: u64, cooldown: u64) -> io::Result<Vec<Export>
         if first {
             first = false
         } else {
-            println!("Cooling down for {} seconds", &cooldown);
+            println!("Cooling down for {} second(s)", &cooldown);
             thread::sleep(time::Duration::from_secs(cooldown));
         }
 
@@ -152,15 +152,15 @@ pub fn compile(tasks: Vec<Task>) {
             Ok(out) => out,
             Err(e) => {
                 println!(
-                    "Encountered an error while compiling {} - {}: {}",
-                    e, task.language, task.name
+                    "Encountered an error while compiling {} - {}:\n {}",
+                    task.language, task.name, e
                 );
                 continue;
             }
         };
         let Ok(stderr) = String::from_utf8(out.stderr) else { continue };
         if stderr.len() != 0 {
-            println!("stderr:\n {}", stderr);
+            println!("Encountered an error while compiling {} - {}:\n {}", task.language, task.name, stderr);
         }
     }
 }
