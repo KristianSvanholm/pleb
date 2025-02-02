@@ -15,7 +15,7 @@ impl Sampler {
         Sampler { i_rapl }
     }
 
-    pub fn sample_start(&self) -> f64 {
+    pub fn sample_start(&self) -> u64 {
         let res = match self.i_rapl.total_energy() {
             Ok(tot_e) => tot_e,
             Err(e) => {
@@ -23,10 +23,10 @@ impl Sampler {
             }
         };
 
-        res as f64
+        res
     }
 
-    pub fn sample_end(&self, prev: f64) -> f64 {
-        self.sample_start() - prev
+    pub fn sample_end(&self, prev: u64) -> u64 {
+        self.sample_start().wrapping_sub(prev)
     }
 }

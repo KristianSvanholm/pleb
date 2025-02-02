@@ -132,7 +132,7 @@ pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str, i: u64) ->
         Err(e) => panic!("Encountered error during benchmark: {}", e),
     };
 
-    let energy = sampler.sample_end(start);
+    let energy = sampler.sample_end(start) as f64;
     let duration = Utc::now().time() - start_time;
 
     Export {
