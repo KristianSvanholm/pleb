@@ -6,20 +6,21 @@ use linux::sampler::Sampler;
 #[cfg(target_os = "macos")]
 use macos::sampler::Sampler;
 
-use chrono::Utc;
+
 use core::fmt;
-use std::collections::HashMap;
 use serde::Serialize;
 use std::fs::{self};
-use std::{io, thread, time};
+use chrono::Utc;
+use std::io;
+
 use std::process::Command;
 
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Clone, Serialize)]
 pub struct Export {
-    language: String,
-    task: String,
-    duration: i64,
-    energy: f64,
+    pub language: String,
+    pub task: String,
+    pub duration: i64,
+    pub energy: f64,
 }
 
 impl fmt::Display for Export {
@@ -34,7 +35,7 @@ impl fmt::Display for Export {
     }
 }
 
-#[derive(Clone, Eq, Hash, PartialEq)]
+#[derive(Debug, Clone, Eq, Hash, PartialEq)]
 pub struct Task {
     path: String,
     pub language: String,
@@ -86,46 +87,17 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
     Ok(res)
 }
 
-pub fn run(tasks: Vec<Task>, runs: u64, cooldown: u64) -> io::Result<Vec<Export>> {
-    let mut res: Vec<Export> = vec![];
+pub fn run(task: Task) -> Export {
 
-    let mut counts: HashMap<Task, u64> = HashMap::new();
-
-    let mut first = true; 
-    for task in tasks {
-        // Cooldown between benchmarks
-        if first {
-            first = false
-        } else {
-            println!("Cooling down for {} second(s)", &cooldown);
-            thread::sleep(time::Duration::from_secs(cooldown));
-        }
-
-        // Count runs for each benchmark
-        counts.entry(task.clone()).and_modify(|c| *c+=1).or_insert(1);
-
-        // Create make command
-        let mut cmd = Command::new("make");
-        cmd.arg("-C").arg(&task.path).arg("run");
-
-        // Fetch benchmark count
-        let count = match counts.get(&task) {
-            Some(c) => c,
-            None => &1,
-        };
-        // Run benchmark
-        res.push(benchmark(cmd, runs, &task.language, &task.name, *count));
-    }
-
-    res.sort_unstable_by_key(|item| (item.language.to_owned(), item.task.to_owned()));
-
-    Ok(res)
+    // Create make command
+    let mut cmd = Command::new("make");
+    cmd.arg("-C").arg(&task.path).arg("run");
+    // Run benchmark
+    benchmark(cmd, task.language, task.name)
 }
 
-pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str, i: u64) -> Export {
+pub fn benchmark(mut cmd: Command, lang: String, task: String) -> Export {
     let sampler = Sampler::new();
-
-    println!("Running {} / {} - {}/{}", lang, task, i, runs);
 
     let start_time = Utc::now().time();
     let start = sampler.sample_start();
@@ -147,24 +119,23 @@ pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str, i: u64) ->
     }
 }
 
-pub fn compile(tasks: Vec<Task>) {
-    for task in tasks {
-        // Create make command
-        let mut cmd = Command::new("make");
-        cmd.arg("-C").arg(task.path).arg("compile");
-        let out = match cmd.output() {
-            Ok(out) => out,
-            Err(e) => {
-                println!(
-                    "Encountered an error while compiling {} - {}:\n {}",
-                    task.language, task.name, e
-                );
-                continue;
-            }
-        };
-        let Ok(stderr) = String::from_utf8(out.stderr) else { continue };
-        if stderr.len() != 0 {
-            println!("Encountered an error while compiling {} - {}:\n {}", task.language, task.name, stderr);
+// Todo:: Rework 
+pub fn compile(task: &Task) {
+    // Create make command
+    let mut cmd = Command::new("make");
+    cmd.arg("-C").arg(task.path.clone()).arg("compile");
+    let out = match cmd.output() {
+        Ok(out) => out,
+        Err(e) => {
+            println!(
+                "Encountered an error while compiling {} - {}:\n {}",
+                task.language, task.name, e
+            );
+            return
         }
+    };
+    let Ok(stderr) = String::from_utf8(out.stderr) else { return };
+    if stderr.len() != 0 {
+        println!("Encountered an error while compiling {} - {}:\n {}", task.language, task.name, stderr);
     }
 }

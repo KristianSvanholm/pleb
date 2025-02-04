@@ -7,12 +7,9 @@ use clap::{Parser, Subcommand};
 use csv::Writer;
 use std::io::Write;
 
-use rand::rng;
-use rand::seq::SliceRandom;
-
 #[derive(Subcommand, Debug, Clone)]
-enum Mode {
-    /// Run the benchmarks
+pub enum Mode {
+    /// Run the
     Run {
         /// Number of runs per task
         #[arg(short, long, default_value_t = 1)]
@@ -47,39 +44,67 @@ struct CLI {
     matrix: bool,
 }
 
-fn main() {
+use std::io;
+use ratatui::{backend::CrosstermBackend, Terminal};
 
-    let start_time = Utc::now().time();
+use crate::{
+    app::{App, AppResult},
+    event::{Event, EventHandler},
+    handler::handle_key_events,
+    tui::Tui,
+};
+
+pub mod app;
+pub mod event;
+pub mod handler;
+pub mod tui;
+pub mod ui;
+
+#[tokio::main]
+async fn main() -> AppResult<()> {
+    
+    // Intitialize terminal user interface
+    let backend = CrosstermBackend::new(io::stdout());
+    let terminal = Terminal::new(backend)?;
+    let mut events = EventHandler::new(250);
 
     let args = CLI::parse();
 
-    let mut tasks = match benchmark::list_all(args.path) {
-        Ok(t) => t,
-        Err(e) => {
-            println!("{}", e);
-            return;
+    let lang = args.language.as_deref();
+    let task = args.task.as_deref();
+
+    // Fetch all tasks and filter out unwanted tasks
+    let tasks = benchmark::list_all(args.path)?.into_iter()
+        .filter(|t| args.language.is_none() || t.language.to_lowercase() == lang.unwrap().to_lowercase())
+        .filter(|t| args.task.is_none() || t.name.to_lowercase() == task.unwrap().to_lowercase())
+        .collect();
+
+    // Create App
+    let mut app = App::new(tasks,args.mode, events.new_sender());
+
+    let mut tui = Tui::new(terminal, events);
+    tui.init()?;
+
+    app.iterate();
+
+    while app.running {
+        // Render UI
+        tui.draw(&mut app)?;
+        // Handle events
+        match tui.events.next().await? {
+            Event::CompileDone(task) => app.next((task.language,task.name)),
+            Event::Status(msg) => app.status(msg),
+            Event::TaskDone(data) => app.done(data),
+            Event::Key(key_event) => handle_key_events(key_event, &mut app)?,
+            Event::Tick => app.tick(),
         }
-    };
-
-    // Filter out unwanted tasks
-    tasks = filter_list(tasks, args.language.as_deref(), args.task.as_deref());
-
-    if args.matrix { matrix(tasks.clone()); }
-
-    let str = match args.mode {
-        Mode::Run{ .. } => "Running",
-        Mode::Compile => "Compiling"
-    };
-
-    println!("{} {} benchmarks ...", str, tasks.len());
-
-    match args.mode {
-        Mode::Run { runs, ordered, cooldown } => run_and_export(tasks, runs, ordered, cooldown),
-        Mode::Compile => benchmark::compile(tasks),
     }
 
-    let duration = Utc::now().time() - start_time;
-    println!("Process took {} second(s)", duration.num_seconds())
+    let _ = csv(app.results);
+
+    // Exit the UI
+    tui.exit()?;
+    Ok(())
 }
 
 // Way too big for a terminal, but whatever
@@ -106,30 +131,6 @@ fn matrix(tasks: Vec<benchmark::Task>) {
     }
 }
 
-fn filter_list(tasks: Vec<benchmark::Task>, lang: Option<&str>, name: Option<&str>) -> Vec<benchmark::Task> {
-  
-    tasks.into_iter()
-        .filter(|t| lang.is_none() || t.language.to_lowercase() == lang.unwrap().to_lowercase())
-        .filter(|t| name.is_none() || t.name.to_lowercase() == name.unwrap().to_lowercase())
-        .collect()
-}
-
-fn run_and_export(unique_tasks: Vec<benchmark::Task>, runs: u64, ordered: bool, cooldown: u64) {
-    
-    let mut tasks = vec![];
-    for ut in unique_tasks {
-        for _ in 0..runs {
-            tasks.push(ut.clone());
-        }
-    }
-
-    if !ordered {
-        tasks.shuffle(&mut rng());
-    }
-
-    let Ok(exports) = benchmark::run(tasks, runs, cooldown) else { panic!("Something has gone terribly wrong :(") };
-    let _ = csv(exports);
-}
 
 use std::fs::File;
 fn csv(data: Vec<Export>) -> Result<(), Box<dyn std::error::Error>> {

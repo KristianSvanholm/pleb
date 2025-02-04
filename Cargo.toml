@@ -18,9 +18,13 @@ lto = true
 chrono = "0.4.38"
 clap = { version = "4.5.20", features = ["derive"] }
 core-foundation = "0.10.0"
+crossterm = { version = "0.28.1", features = ["event-stream"] }
 csv = "1.3.1"
+futures = "0.3.31"
 rand = "0.9.0"
+ratatui = "0.29.0"
 serde = { version = "1.0.216", features = ["derive"] }
+tokio = { version = "1.43.0", features = ["full"] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 powercap = "0.3.5"
