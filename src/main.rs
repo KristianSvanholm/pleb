@@ -100,7 +100,9 @@ async fn main() -> AppResult<()> {
         }
     }
 
-    let _ = csv(app.results);
+    if app.results.len() != 0 {
+        let _ = csv(app.results);
+    }
 
     // Exit the UI
     tui.exit()?;

@@ -116,7 +116,7 @@ pub fn benchmark(mut cmd: Command, lang: String, task: String) -> Export {
     }
 }
 
-// Todo:: Rework
+// Todo:: Collect errors and output errors file
 pub fn compile(task: &Task) -> String {
     // Create make command
     let mut cmd = Command::new("make");
