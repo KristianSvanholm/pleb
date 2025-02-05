@@ -119,7 +119,6 @@ impl App {
             self.status_text = String::from("Done!");
             self.results
                 .sort_unstable_by_key(|item| (item.language.to_owned(), item.task.to_owned()));
-            self.running = false;
             return;
         }
 
