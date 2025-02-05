@@ -136,18 +136,23 @@ impl App {
             self.runs
         );
 
+        let run_msg = matches!(self.mode ,Mode::Run { .. });
+
         let first = self.curr_task == 0;
         let c = self.cooldown.clone();
 
         let mode = self.mode.clone();
         tokio::spawn(async move {
-            if !first {
+            if !first && run_msg {
                 // Cooldown
                 let _ = _sender.send(Event::Status(format!("Cooling down for {} second(s)", c)));
                 thread::sleep(time::Duration::from_secs(c));
             }
 
-            let _ = _sender.send(Event::Status(run_status));
+           
+            if run_msg {
+                let _ = _sender.send(Event::Status(run_status));
+            }
 
             match mode {
                 Mode::Run { .. } => {
@@ -155,7 +160,8 @@ impl App {
                     _sender.send(Event::TaskDone(export))
                 }
                 Mode::Compile => {
-                    benchmark::compile(&_task);
+                    let out = benchmark::compile(&_task);
+                    let _ = _sender.send(Event::Status(out));
                     _sender.send(Event::CompileDone(_task))
                 }
             }

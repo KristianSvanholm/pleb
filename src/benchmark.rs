@@ -117,25 +117,26 @@ pub fn benchmark(mut cmd: Command, lang: String, task: String) -> Export {
 }
 
 // Todo:: Rework
-pub fn compile(task: &Task) {
+pub fn compile(task: &Task) -> String {
     // Create make command
     let mut cmd = Command::new("make");
     cmd.arg("-C").arg(task.path.clone()).arg("compile");
     let out = match cmd.output() {
         Ok(out) => out,
         Err(e) => {
-            println!(
-                "Encountered an error while compiling {} - {}:\n {}",
+            return format!(
+                "Error compiling {} - {}:\n {}",
                 task.language, task.name, e
             );
-            return;
         }
     };
-    let Ok(stderr) = String::from_utf8(out.stderr) else { return };
-    if stderr.len() != 0 {
-        println!(
-            "Encountered an error while compiling {} - {}:\n {}",
-            task.language, task.name, stderr
-        );
+    if let Ok(std_err) = String::from_utf8(out.stderr) {
+        if std_err.len() > 0 {
+            return format!(
+                "Error compiling {} - {}",
+                task.language, task.name
+            );
+        }
     }
+    return format!("Finished compiling {} - {}", task.language, task.name) 
 }
