@@ -1,8 +1,6 @@
 mod benchmark;
 
 use benchmark::Export;
-use std::collections::HashMap;
-use chrono::Utc;
 use clap::{Parser, Subcommand};
 use csv::Writer;
 use std::io::Write;
@@ -106,31 +104,6 @@ async fn main() -> AppResult<()> {
     tui.exit()?;
     Ok(())
 }
-
-// Way too big for a terminal, but whatever
-fn matrix(tasks: Vec<benchmark::Task>) {
-    let mut map: HashMap<String, HashMap<String, bool>> = HashMap::new();
-    let mut names = HashMap::new();
-    for task in tasks {
-        let t = task.clone();
-        map.entry(t.language).or_insert_with(HashMap::new).insert(t.name.clone(), true);
-        names.entry(t.name).or_insert(true);
-    }
-
-    print!("{:11}", "");
-    for (unique_task, _) in names.clone() {
-        print!("{:^18}", unique_task)
-    }
-    print!("\n");
-    for (lang, value) in map {
-        print!("{:11}", lang);
-        for (unique_task, _) in names.clone() {
-            print!("{:^18}", if value.get(&unique_task).is_some() {"x"} else {""});
-        }
-        print!("\n")
-    }
-}
-
 
 use std::fs::File;
 fn csv(data: Vec<Export>) -> Result<(), Box<dyn std::error::Error>> {

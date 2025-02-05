@@ -8,6 +8,9 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
         KeyCode::Esc | KeyCode::Char('q') => {
             app.quit();
         }
+        KeyCode::Char('t') => {
+            app.toggle_display_mode();
+        }
         // Exit application on `Ctrl-C`
         KeyCode::Char('c') | KeyCode::Char('C') => {
             if key_event.modifiers == KeyModifiers::CONTROL {

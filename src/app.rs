@@ -9,6 +9,12 @@ use rand::seq::SliceRandom;
 use tokio::sync::mpsc;
 use std::{thread, time};
 
+#[derive(Debug)]
+pub enum Display {
+    Percent,
+    Fraction,
+}
+
 // Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
@@ -19,6 +25,7 @@ pub struct App {
     pub running: bool,
 
     pub mode: Mode,
+    pub display_mode: Display,
     pub runs: u64, 
     pub ordered: bool,
     pub cooldown: u64,
@@ -82,6 +89,7 @@ impl App {
 
         Self {
             mode,
+            display_mode: Display::Percent,
             sender,
             running: true,
             status,
@@ -167,22 +175,10 @@ impl App {
         self.status_text = msg;
     }
 
-    fn display(&mut self) {
-        for (lang, lcount) in &self.lang_count {
-
-            /*let n: Vec<String> = self.task_count.iter()
-                .filter(|(key,_)| {*key == lang} )
-                .map(|(_, val)| { format!("{}/11", val) })
-                .collect();
-
-            self.output = format!("{:?} -- {}", n, n.len());*/
-
-
-            for (task, tcount) in &self.task_count {
-                if let Some(count) = self.status.get(&(lang.to_string(),task.to_string())) {
-                    print!("{}/{}", count, self.runs)
-                }
-            }
+    pub fn toggle_display_mode(&mut self) {
+        self.display_mode = match self.display_mode {
+            Display::Percent => Display::Fraction,
+            Display::Fraction => Display::Percent
         }
     }
 
