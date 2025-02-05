@@ -13,7 +13,7 @@ pub enum Event {
     Status(String),
     /// Compile done
     CompileDone(benchmark::Task),
-    /// TaskDone 
+    /// TaskDone
     TaskDone(benchmark::Export),
     /// Key press.
     Key(KeyEvent),
@@ -69,11 +69,7 @@ impl EventHandler {
                 };
             }
         });
-        Self {
-            sender,
-            receiver,
-            handler,
-        }
+        Self { sender, receiver, handler }
     }
 
     /// Receive the next event from the handler thread.
@@ -84,17 +80,14 @@ impl EventHandler {
         self.receiver
             .recv()
             .await
-            .ok_or(Box::new(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "This is an IO error",
-            )))
+            .ok_or(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "This is an IO error")))
     }
 
     pub fn evt(&mut self, evt: Event) {
         self.sender.send(evt).unwrap();
     }
 
-    pub fn new_sender(&mut self) -> mpsc::UnboundedSender<Event>{
+    pub fn new_sender(&mut self) -> mpsc::UnboundedSender<Event> {
         self.sender.clone()
     }
 }

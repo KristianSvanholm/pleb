@@ -16,8 +16,8 @@ pub enum Mode {
         #[arg(short, long, action)]
         ordered: bool,
         /// How many seconds delay between each benchmark
-        #[arg(short,long, default_value_t = 0)]
-        cooldown: u64
+        #[arg(short, long, default_value_t = 0)]
+        cooldown: u64,
     },
     /// Compile the benchmarks
     Compile,
@@ -38,12 +38,12 @@ struct CLI {
     #[arg(short, long)]
     task: Option<String>,
     /// Whether to display task and langauge coverage matrix or not
-    #[arg(short,long, action)]
+    #[arg(short, long, action)]
     matrix: bool,
 }
 
-use std::io;
 use ratatui::{backend::CrosstermBackend, Terminal};
+use std::io;
 
 use crate::{
     app::{App, AppResult},
@@ -60,7 +60,6 @@ pub mod ui;
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    
     // Intitialize terminal user interface
     let backend = CrosstermBackend::new(io::stdout());
     let terminal = Terminal::new(backend)?;
@@ -72,13 +71,16 @@ async fn main() -> AppResult<()> {
     let task = args.task.as_deref();
 
     // Fetch all tasks and filter out unwanted tasks
-    let tasks = benchmark::list_all(args.path)?.into_iter()
-        .filter(|t| args.language.is_none() || t.language.to_lowercase() == lang.unwrap().to_lowercase())
+    let tasks = benchmark::list_all(args.path)?
+        .into_iter()
+        .filter(|t| {
+            args.language.is_none() || t.language.to_lowercase() == lang.unwrap().to_lowercase()
+        })
         .filter(|t| args.task.is_none() || t.name.to_lowercase() == task.unwrap().to_lowercase())
         .collect();
 
     // Create App
-    let mut app = App::new(tasks,args.mode, events.new_sender());
+    let mut app = App::new(tasks, args.mode, events.new_sender());
 
     let mut tui = Tui::new(terminal, events);
     tui.init()?;
@@ -90,7 +92,7 @@ async fn main() -> AppResult<()> {
         tui.draw(&mut app)?;
         // Handle events
         match tui.events.next().await? {
-            Event::CompileDone(task) => app.next((task.language,task.name)),
+            Event::CompileDone(task) => app.next((task.language, task.name)),
             Event::Status(msg) => app.status(msg),
             Event::TaskDone(data) => app.done(data),
             Event::Key(key_event) => handle_key_events(key_event, &mut app)?,

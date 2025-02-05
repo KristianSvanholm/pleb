@@ -6,11 +6,10 @@ use linux::sampler::Sampler;
 #[cfg(target_os = "macos")]
 use macos::sampler::Sampler;
 
-
+use chrono::Utc;
 use core::fmt;
 use serde::Serialize;
 use std::fs::{self};
-use chrono::Utc;
 use std::io;
 
 use std::process::Command;
@@ -73,7 +72,7 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
                 parts = parts.into_iter().rev().collect();
 
                 if parts[0].to_string() == "node_modules" {
-                    continue
+                    continue;
                 }
 
                 res.push(Task {
@@ -88,7 +87,6 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
 }
 
 pub fn run(task: Task) -> Export {
-
     // Create make command
     let mut cmd = Command::new("make");
     cmd.arg("-C").arg(&task.path).arg("run");
@@ -102,7 +100,6 @@ pub fn benchmark(mut cmd: Command, lang: String, task: String) -> Export {
     let start_time = Utc::now().time();
     let start = sampler.sample_start();
 
-    
     match cmd.output() {
         Ok(_) => (),
         Err(e) => panic!("Encountered error during benchmark: {}", e),
@@ -119,7 +116,7 @@ pub fn benchmark(mut cmd: Command, lang: String, task: String) -> Export {
     }
 }
 
-// Todo:: Rework 
+// Todo:: Rework
 pub fn compile(task: &Task) {
     // Create make command
     let mut cmd = Command::new("make");
@@ -131,11 +128,14 @@ pub fn compile(task: &Task) {
                 "Encountered an error while compiling {} - {}:\n {}",
                 task.language, task.name, e
             );
-            return
+            return;
         }
     };
     let Ok(stderr) = String::from_utf8(out.stderr) else { return };
     if stderr.len() != 0 {
-        println!("Encountered an error while compiling {} - {}:\n {}", task.language, task.name, stderr);
+        println!(
+            "Encountered an error while compiling {} - {}:\n {}",
+            task.language, task.name, stderr
+        );
     }
 }
