@@ -131,7 +131,7 @@ impl App {
             "Running {} {} - {}/{}",
             _task.language,
             _task.name,
-            self.status.get(&(_task.language.clone(), _task.name.clone())).expect(""),
+            self.status.get(&(_task.language.clone(), _task.name.clone())).expect("") + 1,
             self.runs
         );
 
