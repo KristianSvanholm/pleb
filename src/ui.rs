@@ -83,7 +83,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     );
 
     frame.render_widget(
-        Paragraph::new("Under Construction")
+        Paragraph::new(app.estimated_time())
             .block(Block::bordered().title_top("Estimated time left")),
         bottombar[2],
     );

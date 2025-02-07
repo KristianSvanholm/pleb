@@ -1,6 +1,8 @@
+use chrono::DurationRound;
 use rand::rng;
 use std::collections::HashMap;
-use std::error;
+use std::{error, usize};
+use std::time::Duration;
 
 use crate::benchmark::{self, Export, Task};
 use crate::event::Event;
@@ -31,6 +33,7 @@ pub struct App {
     pub cooldown: u64,
     pub curr_task: usize,
     pub status: HashMap<(String, String), u64>, // Track completion count
+    pub task_duration: HashMap<(String, String), Duration>, // Track completion time for benchmarks
     pub status_text: String,
     pub tasks: Vec<Task>,                 // Todo task list
     pub task_count: HashMap<String, u64>, // Count of unique languages for each task
@@ -96,6 +99,7 @@ impl App {
             cooldown: _cooldown,
             ordered: _ordered,
             tasks,
+            task_duration: HashMap::new(),
             task_count,
             lang_count,
             results: vec![],
@@ -103,6 +107,7 @@ impl App {
     }
 
     pub fn done(&mut self, data: benchmark::Export) {
+        self.task_duration.entry((data.language.to_string(), data.task.to_string())).or_insert(Duration::from_millis(data.duration as u64));
         self.results.push(data.clone());
         self.next((data.language, data.task));
     }
@@ -181,6 +186,26 @@ impl App {
             Display::Percent => Display::Fraction,
             Display::Fraction => Display::Percent,
         }
+    }
+
+    pub fn estimated_time(&mut self) -> String {
+        
+        if self.task_duration.len() != self.tasks.len() / self.runs as usize {
+            return String::from("Estimating...")
+        }
+
+        let mut total_dur = Duration::from_secs(0);
+        for ((language, name), val) in &self.task_duration {
+
+            let count = match self.status.get(&(language.to_string(),name.to_string())) {
+                Some(c) => c.to_owned(),
+                None => 0,
+            };
+            
+            total_dur += val.mul_f64((self.runs - count) as f64);
+        }
+        let cooldown = Duration::from_secs(self.cooldown * (self.tasks.len() as u64 - self.curr_task as u64));
+        format!("{} Seconds", (total_dur + cooldown).as_secs())
     }
 
     pub fn tick(&self) {}
