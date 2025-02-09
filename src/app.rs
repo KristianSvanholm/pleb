@@ -190,7 +190,7 @@ impl App {
     pub fn estimated_time(&mut self) -> String {
         
         if self.task_duration.len() != self.tasks.len() / self.runs as usize {
-            return String::from("Estimating...")
+            return String::from(format!("Estimating... ({}/{})", self.task_duration.len() , self.tasks.len() / self.runs as usize))
         }
 
         let mut total_dur = Duration::from_secs(0);
