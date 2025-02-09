@@ -8,11 +8,13 @@ use macos::sampler::Sampler;
 
 use chrono::Utc;
 use core::fmt;
+use std::ops::Deref;
+use std::path::PathBuf;
 use serde::Serialize;
 use std::fs::{self};
 use std::io;
 
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 #[derive(Debug, Default, Clone, Serialize)]
 pub struct Export {
@@ -86,6 +88,84 @@ pub fn list_all(path: String) -> io::Result<Vec<Task>> {
     Ok(res)
 }
 
+pub fn list_all_alt(path: String) -> io::Result<Vec<Task>> {
+    let mut res: Vec<Task> = vec![];
+
+    //fs::read_dir(&path)?.filter_map(|d| d.ok().and_then(|di| if di.path().is_dir() {Some(di.path())} else { None})) Working list of 1 layer dirs
+   
+    //let x = fs::read_dir(&path)?.filter_map(|d| d.ok().and_then(|di| if di.path().is_dir() {Some(di.path())} else { None}))
+    //   .filter_map(|d| fs::read_dir(d).ok()).map(|d| d.filter_map(|di| di.ok().and_then(|dir| if dir.path().is_dir() {Some(dir.path())} else {None}))).
+     
+    
+    let x = fs::read_dir(&path)? // [fs]
+        .filter_map(|d| 
+            d.ok().and_then(|di| 
+                if di.path().is_dir() {
+                    Some(di.path())
+                } else {
+                    None
+                }
+            )
+        ) // [dirs]
+        .filter_map(|d| fs::read_dir(d).ok()) // [[fs][fs][fs]]
+        .map(|d| 
+            d.filter_map(|di| 
+                di.ok().and_then(|dir| 
+                    if dir.path().is_dir() {
+                        Some(dir.path())
+                    } else {
+                        None
+                    }
+                )
+            ).collect()) // [[dirs][dirs][dirs]]
+        .collect::<Vec<Vec<PathBuf>>>().concat(); //[dirs]
+
+    for d in x {
+        println!("{}",d.to_str().unwrap())
+    }
+
+    // For each language
+    for lang in fs::read_dir(&path)? {
+        let lang = lang?;
+        let language_path = lang.path();
+
+        // Skip files found
+        if !language_path.is_dir() {
+            continue;
+        }
+
+        // For each task
+        for task in fs::read_dir(&language_path)? {
+            let task = task?;
+            let task_path = task.path();
+
+            // Skip files found
+            if !task_path.is_dir() {
+                continue;
+            }
+
+            if let Some(str) = task.path().to_str() {
+                // Get language name and Task
+                let mut parts: Vec<&str> = str.split("/").collect();
+
+                // Reverse array
+                parts = parts.into_iter().rev().collect();
+
+                if parts[0].to_string() == "node_modules" {
+                    continue;
+                }
+
+                res.push(Task {
+                    path: str.to_string(),
+                    language: parts[1].to_string(),
+                    name: parts[0].to_string(),
+                });
+            }
+        }
+    }
+    Ok(res)
+}
+
 pub fn run(task: Task) -> Export {
     // Create make command
     let mut cmd = Command::new("make");
@@ -100,7 +180,7 @@ pub fn benchmark(mut cmd: Command, lang: String, task: String) -> Export {
     let start_time = Utc::now().time();
     let start = sampler.sample_start();
 
-    match cmd.output() {
+    match cmd.stdout(Stdio::null()).stderr(Stdio::null()).output() {
         Ok(_) => (),
         Err(e) => panic!("Encountered error during benchmark: {}", e),
     };
