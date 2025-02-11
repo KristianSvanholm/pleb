@@ -53,8 +53,8 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .block(
             Block::bordered()
                 .title(" Benchmarks ")
-                .title_bottom(" [t] toggle between fractions and percentages ")
-                .title_bottom(" [q] [esc] or [ctrl+c] exit ")
+                .title_bottom(" [t] toggle fractions / percentages ")
+                .title_bottom(" [ctrl+c] exit ")
                 .title_alignment(Alignment::Center),
         )
         .style(Style::default().fg(Color::White).bg(Color::Black)),
