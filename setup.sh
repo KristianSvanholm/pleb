@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Install nix pkg manager (Single-user install)
+# Install nix pkg manager (Single-user install) 
+# ONLY UNCOMMENT NEXT LINE IF YOU DO NOT HAVE THE NIX PACKAGE MANAGER INSTALLED ALREADY
 #sh <(curl -L https://nixos.org/nix/install) --no-daemon
 
 # Download
