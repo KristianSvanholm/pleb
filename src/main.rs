@@ -31,10 +31,10 @@ struct CLI {
     /// Set path to benchmarks directory
     #[arg(short, long, default_value = "./benchmarks")]
     path: String,
-    /// Set language filter
+    /// Set language filter (comma separated list)
     #[arg(short, long)]
     language: Option<String>,
-    /// Set task filter
+    /// Set task filter (comma separated list)
     #[arg(short, long)]
     task: Option<String>,
     /// Whether to display task and langauge coverage matrix or not
@@ -58,6 +58,15 @@ pub mod handler;
 pub mod tui;
 pub mod ui;
 
+//TODO:: Redo with Clap instead
+fn spl(inp: Option<String>) -> Vec<String> {
+    if let Some(l) = inp {
+        return l.split(",").map(|e| e.to_string().to_lowercase()).collect();
+    } else {
+        return vec![]
+    }
+}
+
 #[tokio::main]
 async fn main() -> AppResult<()> {
     // Intitialize terminal user interface
@@ -67,16 +76,16 @@ async fn main() -> AppResult<()> {
 
     let args = CLI::parse();
 
-    let lang = args.language.as_deref();
-    let task = args.task.as_deref();
+    let lang = spl(args.language);
+    let task = spl(args.task);
 
     // Fetch all tasks and filter out unwanted tasks
     let tasks = benchmark::list_all(args.path)?
         .into_iter()
         .filter(|t| {
-            args.language.is_none() || t.language.to_lowercase() == lang.unwrap().to_lowercase()
+            lang.len()==0 || lang.contains(&t.language.to_lowercase())
         })
-        .filter(|t| args.task.is_none() || t.name.to_lowercase() == task.unwrap().to_lowercase())
+        .filter(|t| task.len() ==0 || task.contains(&t.name.to_lowercase()))
         .collect();
 
     // Create App
