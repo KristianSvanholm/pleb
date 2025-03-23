@@ -4,7 +4,7 @@
 cargo build --profile=release
 
 # Generate inputs and Compile
-./benchmarks/gen-input.sh
+cd benchmarks && sh gen-input.sh && cs ..
 ./target/release/thesis compile
 
 # Run benchmarks
