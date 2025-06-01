@@ -1,5 +1,4 @@
 compile:
-	cp spectralnorm.hipe-2.hipe spectralnorm.erl
 	erlc +native +"{hipe, [o3]}" spectralnorm.erl
 measure:
 	sudo modprobe msr

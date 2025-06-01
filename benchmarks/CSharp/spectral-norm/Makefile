@@ -1,5 +1,4 @@
 compile:
-	cp spectralnorm.csharpcore-3.csharpcore Program.cs
 	dotnet build -c Release
 
 measure:

@@ -11,8 +11,6 @@ revcomp-input25000000.txt
 #CSharp & FSharp
 obj/
 bin/
-Program.fs
-Program.cs
 
 #Ada
 *.ads
@@ -24,7 +22,6 @@ Program.cs
 #Haskell
 *.ghc_run
 *.hi
-*.hs
 
 #OCaml
 *.cmi
@@ -55,13 +52,9 @@ target/
 
 # Erlang
 *.beam
-*.erl
 
 # Go
 *.go_run
-
-# Javascript
-*.js
 
 # Lisp
 *.core

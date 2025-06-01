@@ -1,5 +1,4 @@
 compile:
-	cp knucleotide.csharpcore-6.csharpcore Program.cs
 	dotnet build -c Release
 
 measure:

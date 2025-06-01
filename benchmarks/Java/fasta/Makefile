@@ -1,5 +1,4 @@
 compile:
-	cp fasta.java-5.java fasta.java
 	javac -d .  fasta.java
 measure:
 	sudo modprobe msr

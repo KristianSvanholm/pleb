@@ -3,13 +3,13 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./mandelbrot.go-3.go_run 16000" Go mandelbrot
+	sudo ../../RAPL/main "./mandelbrot.go-3.go_run 12000" Go mandelbrot
 
 run:
-	./mandelbrot.go-3.go_run 16000
+	./mandelbrot.go-3.go_run 12000
 
 mem:
-	/usr/bin/time -v ./mandelbrot.go-3.go_run 16000
+	/usr/bin/time -v ./mandelbrot.go-3.go_run 12000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./mandelbrot.go-3.go_run 16000
+	valgrind --tool=massif --stacks=yes ./mandelbrot.go-3.go_run 12000

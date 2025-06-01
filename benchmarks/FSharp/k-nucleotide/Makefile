@@ -1,5 +1,4 @@
 compile:
-	cp knucleotide.fsharpcore-4.fsharpcore Program.fs
 	dotnet build -c Release
 
 measure:

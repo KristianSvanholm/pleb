@@ -1,5 +1,4 @@
 compile:
-	cp spectralnorm.jruby-4.jruby spectralnorm.rb
 
 measure:
 	sudo modprobe msr

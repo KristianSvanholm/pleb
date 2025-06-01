@@ -1,7 +1,5 @@
 compile:
 
-	cp binarytrees.jruby-5.jruby binarytrees.rb
-
 measure:
 	sudo modprobe msr
 	sudo ../../RAPL/main "jruby -Xcompile.fastest=true -Xcompile.invokedynamic=true -J-server -J-Xmx2G binarytrees.rb 21" JRuby binary-trees

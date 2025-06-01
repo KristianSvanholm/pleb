@@ -1,5 +1,4 @@
 compile:
-	cp nbody.typescript-3.typescript nbody.typescript-3.ts
 	tsc --alwaysStrict -t ESNEXT  nbody.typescript-3.ts
 
 measure:

@@ -1,5 +1,4 @@
 compile:
-	cp spectralnorm.java-2.java spectralnorm.java
 	javac -d .  spectralnorm.java
 measure:
 	sudo modprobe msr

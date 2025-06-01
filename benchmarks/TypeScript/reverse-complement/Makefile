@@ -1,5 +1,4 @@
 compile:
-	cp revcomp.typescript revcomp.ts
 	tsc --alwaysStrict -t ESNEXT  revcomp.ts
 	
 xmeasure:

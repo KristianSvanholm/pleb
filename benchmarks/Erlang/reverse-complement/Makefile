@@ -1,5 +1,4 @@
 compile:
-	cp revcomp.hipe revcomp.erl
 	erlc +native +"{hipe, [o3]}" revcomp.erl
 measure:
 	sudo modprobe msr

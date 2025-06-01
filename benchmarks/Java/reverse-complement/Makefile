@@ -1,5 +1,4 @@
 compile:
-	cp revcomp.java-3.java revcomp.java
 	javac -d .  revcomp.java
 measure:
 	sudo modprobe msr

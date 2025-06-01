@@ -1,5 +1,4 @@
 compile:
-	cp fannkuchredux.typescript fannkuchredux.ts
 	tsc --alwaysStrict -t ESNEXT  fannkuchredux.ts
 
 measure:
