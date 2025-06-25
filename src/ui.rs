@@ -105,8 +105,8 @@ fn dynamic_color(count: f64, runs: f64) -> Style {
 
     // Approx. equal thirds
     let color = match percent {
-        0.0..0.333 => Color::Red,
-        0.333..0.666 => Color::Yellow,
+        0.0..=0.333 => Color::Red,
+        0.333..=0.666 => Color::Yellow,
         _ => Color::Green,
     };
 
