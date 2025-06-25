@@ -1,5 +1,4 @@
 compile:	
-	cp revcomp.fsharpcore Program.fs
 	dotnet build -c Release
 
 measure:

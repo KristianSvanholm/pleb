@@ -1,5 +1,4 @@
 compile:
-	cp nbody.java-4.java nbody.java
 	javac -d .  nbody.java
 measure:
 	sudo modprobe msr

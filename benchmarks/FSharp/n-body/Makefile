@@ -1,5 +1,4 @@
 compile:	
-	cp nbody.fsharpcore Program.fs
 	dotnet build -c Release
 
 measure:

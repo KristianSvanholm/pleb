@@ -1,12 +1,16 @@
+"use strict";
 /* The Computer Language Benchmarks Game
    http://benchmarksgame.alioth.debian.org/
 
    node.js version by Joe Farro
    TypeScript adaptation by Josh Goldfoot
 */
-"use strict";
 /// <reference path="../node_modules/@types/node/index.d.ts" />
 class LinkedArray {
+    prev;
+    next;
+    pos;
+    data;
     constructor(prev) {
         this.prev = prev;
         this.next = null;

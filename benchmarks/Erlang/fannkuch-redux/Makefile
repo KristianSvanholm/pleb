@@ -1,5 +1,4 @@
 compile:
-	cp fannkuchredux.hipe fannkuchredux.erl
 	erlc +native +"{hipe, [o3]}" fannkuchredux.erl
 measure:
 	sudo modprobe msr

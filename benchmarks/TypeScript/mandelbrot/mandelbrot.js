@@ -1,10 +1,10 @@
+"use strict";
 /* The Computer Language Benchmarks Game
    http://benchmarksgame.alioth.debian.org/
 
    direct transliteration of Greg Buchholz's C program
    contributed by Isaac Gouy
 */
-"use strict";
 /// <reference path="../node_modules/@types/node/index.d.ts" />
 const w = +process.argv[2];
 const h = w;

@@ -1,5 +1,4 @@
 compile:
-	cp spectralnorm.typescript spectralnorm.ts
 	tsc --alwaysStrict -t ESNEXT  spectralnorm.ts
 
 measure:

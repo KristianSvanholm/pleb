@@ -6,19 +6,20 @@ use linux::sampler::Sampler;
 #[cfg(target_os = "macos")]
 use macos::sampler::Sampler;
 
-use chrono::{Duration, Utc};
+use chrono::Utc;
 use core::fmt;
-use std::process::Command;
+use serde::Serialize;
 use std::fs::{self};
 use std::io;
-use serde::Serialize;
 
-#[derive(Debug, Default, Serialize)]
+use std::process::Command;
+
+#[derive(Debug, Default, Clone, Serialize)]
 pub struct Export {
-    language: String,
-    task: String,
-    duration: i64,
-    energy: f64,
+    pub language: String,
+    pub task: String,
+    pub duration: i64,
+    pub energy: f64,
 }
 
 impl fmt::Display for Export {
@@ -33,33 +34,18 @@ impl fmt::Display for Export {
     }
 }
 
-#[derive(Serialize)]
-pub struct Exports(pub Vec<Export>);
-
-impl fmt::Display for Exports {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Results:\n")?;
-        for (i, v) in self.0.iter().enumerate() {
-            write!(
-                f,
-                "{} - {} - {:>2} - {:>10} µj, {:>3} ms, {:>10.5} w\n",
-                v.language,
-                v.task,
-                i,
-                v.energy,
-                v.duration,
-                v.energy / v.duration as f64
-            )?;
-        }
-        Ok(())
-    }
+#[derive(Debug, Clone, Eq, Hash, PartialEq)]
+pub struct Task {
+    path: String,
+    pub language: String,
+    pub name: String,
 }
 
-pub fn run(path: &str, runs: u64) -> io::Result<Vec<Exports>> {
-    let mut res: Vec<Exports> = vec![];
+pub fn list_all(path: String) -> io::Result<Vec<Task>> {
+    let mut res: Vec<Task> = vec![];
 
     // For each language
-    for lang in fs::read_dir(path)? {
+    for lang in fs::read_dir(&path)? {
         let lang = lang?;
         let language_path = lang.path();
 
@@ -73,71 +59,84 @@ pub fn run(path: &str, runs: u64) -> io::Result<Vec<Exports>> {
             let task = task?;
             let task_path = task.path();
 
-            /*
-                For a faster runtime
-                if let Some(x) = task_path.to_str() {
-                    if !x.contains("C") {
-                        continue; 
-                }
-            }*/
-
             // Skip files found
             if !task_path.is_dir() {
-                continue
+                continue;
             }
 
             if let Some(str) = task.path().to_str() {
                 // Get language name and Task
-                let parts: Vec<&str> = str.split("/").collect();
+                let mut parts: Vec<&str> = str.split("/").collect();
 
-                // Create make command
-                let mut cmd = Command::new("make");
-                cmd.arg("-C").arg(str).arg("run");
+                // Reverse array
+                parts = parts.into_iter().rev().collect();
 
-                // Run benchmark
-                res.push(benchmark(cmd, runs, parts[3],parts[4]));
+                if parts[0].to_string() == "node_modules" {
+                    continue;
+                }
+
+                res.push(Task {
+                    path: str.to_string(),
+                    language: parts[1].to_string(),
+                    name: parts[0].to_string(),
+                });
             }
         }
     }
-
     Ok(res)
 }
 
-pub fn benchmark(mut cmd: Command, runs: u64, lang: &str, task: &str) -> Exports {
-    let sampler = Sampler::new();
-
-    let mut exports: Vec<Export> = vec![];
-
-    for n in 0..runs {
-
-        println!("Running {} / {} - {}/{}", lang, task, n+1, runs);
-
-        let start_time = Utc::now().time();
-        let start = sampler.sample_start();
-
-        match cmd.output() {
-            Ok(_) => (),
-            Err(e) => println!("{}", e),
-        };
-
-        let energy = sampler.sample_end(start);
-        let duration = Utc::now().time() - start_time;
-        exports.push(Export { 
-            language: lang.to_string(), 
-            task: task.to_string(), 
-            duration: duration.num_milliseconds(), 
-            energy });
-    }
-
-    Exports(exports)
+pub fn run(task: Task) -> Export {
+    // Create make command
+    let mut cmd = Command::new("make");
+    cmd.arg("-C").arg(&task.path).arg("run");
+    // Run benchmark
+    benchmark(cmd, task.language, task.name)
 }
 
-pub fn summarize(exports: Exports) -> Export {
-    let mut summary = Export::default();
-    for exp in exports.0 {
-        summary.energy += exp.energy;
-        summary.duration += exp.duration;
-    }
+pub fn benchmark(mut cmd: Command, lang: String, task: String) -> Export {
+    let sampler = Sampler::new();
 
-    summary
+    let start_time = Utc::now().time();
+    let start = sampler.sample_start();
+
+    match cmd.output() {
+        Ok(_) => (),
+        Err(e) => panic!("Encountered error during benchmark: {}", e),
+    };
+
+    let energy = sampler.sample_end(start) as f64;
+    let duration = Utc::now().time() - start_time;
+
+    Export {
+        language: lang.to_string(),
+        task: task.to_string(),
+        duration: duration.num_milliseconds(),
+        energy,
+    }
+}
+
+// Todo:: Collect errors and output errors file
+pub fn compile(task: &Task) -> String {
+    // Create make command
+    let mut cmd = Command::new("make");
+    cmd.arg("-C").arg(task.path.clone()).arg("compile");
+    let out = match cmd.output() {
+        Ok(out) => out,
+        Err(e) => {
+            return format!(
+                "Error compiling {} - {}:\n {}",
+                task.language, task.name, e
+            );
+        }
+    };
+    if let Ok(std_err) = String::from_utf8(out.stderr) {
+        if std_err.len() > 0 {
+            return format!(
+                "Error compiling {} - {}",
+                task.language, task.name
+            );
+        }
+    }
+    return format!("Finished compiling {} - {}", task.language, task.name) 
 }

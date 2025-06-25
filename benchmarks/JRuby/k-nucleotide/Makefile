@@ -1,5 +1,4 @@
 compile:
-	cp knucleotide.jruby-3.jruby knucleotide.rb
 
 measure:
 	sudo modprobe msr

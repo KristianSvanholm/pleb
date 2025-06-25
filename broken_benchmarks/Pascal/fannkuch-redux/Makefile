@@ -1,0 +1,16 @@
+compile:
+	fpc -FuInclude/fpascal -XXs -O4 -Tlinux -oFPASCAL_RUN fannkuchredux.pas
+	mv FPASCAL_RUN fannkuchredux.fpascal_run
+measure:
+	sudo modprobe msr
+	sudo ../../RAPL/main "./fannkuchredux.fpascal_run 12" Pascal fannkuch-redux
+
+run:
+	./fannkuchredux.fpascal_run 12
+
+mem:
+	/usr/bin/time -v ./fannkuchredux.fpascal_run 12
+
+valgrind:
+	valgrind --tool=massif --stacks=yes ./fannkuchredux.fpascal_run 12
+

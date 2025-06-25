@@ -1,14 +1,13 @@
 compile:
-	cp -L mandelbrot.node mandelbrot.js
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "node mandelbrot.js 16000" JavaScript mandelbrot
+	sudo ../../RAPL/main "node mandelbrot.js 12000" JavaScript mandelbrot
 
 run:
-	node mandelbrot.js 16000
+	node mandelbrot.js 12000
 
 mem:
-	/usr/bin/time -v node mandelbrot.js 16000
+	/usr/bin/time -v node mandelbrot.js 12000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes node mandelbrot.js 16000
+	valgrind --tool=massif --stacks=yes node mandelbrot.js 12000

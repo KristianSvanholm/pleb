@@ -1,5 +1,4 @@
 compile:
-	cp fasta.hipe-2.hipe fasta.erl
 	erlc +native +"{hipe, [o3]}" fasta.erl
 measure:
 	sudo modprobe msr

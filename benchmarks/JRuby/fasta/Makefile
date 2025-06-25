@@ -1,5 +1,4 @@
 compile:
-	cp fasta.jruby-3.jruby fasta.rb
 
 measure:
 	sudo modprobe msr

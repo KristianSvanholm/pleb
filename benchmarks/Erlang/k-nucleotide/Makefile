@@ -1,5 +1,4 @@
 compile:
-	cp knucleotide.hipe-3.hipe knucleotide.erl
 	erlc +native +"{hipe, [o3]}" knucleotide.erl
 measure:
 	sudo modprobe msr
